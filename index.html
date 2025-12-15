@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iracrates Bus Booking System - Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0da271;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Search Form */
+        .search-form {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: -3rem auto 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Buses Grid */
+        .buses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .bus-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .bus-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bus-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bus-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .bus-plate {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .bus-body {
+            padding: 1.5rem;
+        }
+
+        .route-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .route-cities {
+            text-align: center;
+        }
+
+        .from-to {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .route-details {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .bus-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        .seats-available {
+            background-color: #f0f9ff;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Seat Selection Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 90%;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Seat Layout */
+        .bus-diagram {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .driver-seat {
+            background-color: var(--gray);
+            color: white;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .seat-layout {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            max-width: 300px;
+            margin: 0 auto 2rem;
+        }
+
+        .seat {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .seat.available {
+            background-color: #d1fae5;
+            color: var(--dark);
+        }
+
+        .seat.available:hover {
+            background-color: #a7f3d0;
+            transform: scale(1.05);
+        }
+
+        .seat.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .seat.booked {
+            background-color: var(--light-gray);
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+
+        .seat.women-only {
+            background-color: #fce7f3;
+            color: #db2777;
+        }
+
+        .seat-label {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--gray);
+        }
+
+        /* Payment Modal */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .payment-method {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+        }
+
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-desc {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav li {
+                width: 100%;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.75rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .search-form {
+                padding: 1.5rem;
+                margin: -2rem auto 2rem;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 1rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
+                    <span>IBBS Uganda</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-route"></i> Routes</a></li>
+                        <li><a href="bus_companies.html" class="active"><i class="fas fa-bus-alt"></i> Bus Companies</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+                    </ul>
+                </nav>
+                <div class="user-menu">
+                    <a href="login.html" class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-user"></i> Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Book Bus Tickets Across Uganda</h1>
+            <p>Travel easily between Kampala, Gulu, Lira, Mbale, Arua, and other major cities. Secure your seat with mobile money payment.</p>
+        </div>
+    </section>
+
+    <!-- Search Form -->
+    <section class="container">
+        <div class="search-form">
+            <h2 class="section-title">
+                <i class="fas fa-search"></i> Find Your Bus
+            </h2>
+            
+            <form id="searchForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fromCity">From</label>
+                        <select class="form-control" id="fromCity" required>
+                            <option value="">Select departure city</option>
+                            <option value="Kampala" selected>Kampala</option>
+                            <option value="Gulu">Gulu</option>
+                            <option value="Lira">Lira</option>
+                            <option value="Mbale">Mbale</option>
+                            <option value="Arua">Arua</option>
+                            <option value="Mbarara">Mbarara</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="toCity">To</label>
+                        <select class="form-control" id="toCity" required>
+                            <option value="">Select destination city</option>
+                            <option value="Kampala">Kampala</option>
+                            <option value="Gulu" selected>Gulu</option>
+                            <option value="Lira">Lira</option>
+                            <option value="Mbale">Mbale</option>
+                            <option value="Arua">Arua</option>
+                            <option value="Mbarara">Mbarara</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="travelDate">Travel Date</label>
+                        <input type="date" class="form-control" id="travelDate" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-secondary search-btn">
+                    <i class="fas fa-search"></i> Search Buses
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h2 class="section-title">
+            <i class="fas fa-bus"></i> Available Buses
+        </h2>
+        
+        <div class="buses-grid" id="busesGrid">
+            <!-- Bus cards will be populated by JavaScript -->
+        </div>
+        
+        <div class="section-title">
+            <i class="fas fa-info-circle"></i> Popular Routes
+        </div>
+        
+        <div class="popular-routes">
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+                <span style="background: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <i class="fas fa-road" style="color: var(--primary);"></i> Kampala → Gulu
+                </span>
+                <span style="background: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <i class="fas fa-road" style="color: var(--primary);"></i> Kampala → Lira
+                </span>
+                <span style="background: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <i class="fas fa-road" style="color: var(--primary);"></i> Kampala → Mbale
+                </span>
+                <span style="background: white; padding: 0.75rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <i class="fas fa-road" style="color: var(--primary);"></i> Kampala → Arua
+                </span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Seat Selection Modal -->
+    <div class="modal" id="seatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-chair"></i> Select Your Seat
+                </div>
+                <button class="close-modal" id="closeSeatModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="bus-info-summary">
+                    <h3>Kampala → Gulu</h3>
+                    <p>Gateway Bus | Departure: 08:00 AM, 15 Dec 2023</p>
+                    <p>Selected Seat: <span id="selectedSeatDisplay">None</span></p>
+                    <p>Price: <span id="seatPrice">UGX 35,000</span></p>
+                </div>
+                
+                <div class="bus-diagram">
+                    <div class="driver-seat">Driver</div>
+                    <div class="seat-layout" id="seatLayout">
+                        <!-- Seats will be generated by JavaScript -->
+                    </div>
+                    <div class="seat-label">
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: #d1fae5; border-radius: 3px; margin-right: 5px;"></span> Available
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: var(--primary); border-radius: 3px; margin: 0 5px 0 15px;"></span> Selected
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: var(--light-gray); border-radius: 3px; margin: 0 5px 0 15px;"></span> Booked
+                        <span style="display: inline-block; width: 15px; height: 15px; background-color: #fce7f3; border-radius: 3px; margin: 0 5px 0 15px;"></span> Women Only
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="proceedToPayment" style="width: 100%; padding: 1rem;">
+                    <i class="fas fa-arrow-right"></i> Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-credit-card"></i> Complete Your Payment
+                </div>
+                <button class="close-modal" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-summary">
+                    <h3>Booking Summary</h3>
+                    <div style="background: #f9fafb; padding: 1rem; border-radius: var(--radius); margin: 1rem 0;">
+                        <p><strong>Route:</strong> Kampala → Gulu</p>
+                        <p><strong>Bus:</strong> Gateway Bus (UBA 123A)</p>
+                        <p><strong>Seat:</strong> <span id="paymentSeatNumber">12A</span></p>
+                        <p><strong>Date & Time:</strong> 15 Dec 2023, 08:00 AM</p>
+                        <p><strong>Passenger:</strong> John Doe (0700123456)</p>
+                        <p><strong>Total Amount:</strong> <span style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">UGX 35,000</span></p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 1rem;">Select Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-method" data-method="mtn">
+                        <div class="payment-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-name">MTN Mobile Money</div>
+                        <div class="payment-desc">Pay with your MTN MoMo wallet</div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="airtel">
+                        <div class="payment-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="payment-name">Airtel Money</div>
+                        <div class="payment-desc">Pay with your Airtel Money wallet</div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="bank">
+                        <div class="payment-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="payment-name">Bank Transfer</div>
+                        <div class="payment-desc">Transfer directly to our bank account</div>
+                    </div>
+                </div>
+                
+                <div id="paymentDetails" style="display: none; margin-top: 2rem;">
+                    <div class="form-group">
+                        <label for="phoneNumber">Mobile Money Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="07XXXXXXXX">
+                    </div>
+                    <button class="btn btn-secondary" id="confirmPayment" style="width: 100%; padding: 1rem; margin-top: 1rem;">
+                        <i class="fas fa-lock"></i> Confirm Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--secondary), #0da271);">
+                <div class="modal-title">
+                    <i class="fas fa-check-circle"></i> Booking Confirmed!
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="font-size: 5rem; color: var(--secondary); margin-bottom: 1rem;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 style="margin-bottom: 1rem;">Thank You for Your Booking!</h2>
+                <p>Your bus ticket has been successfully booked.</p>
+                
+                <div style="background: #f0f9ff; padding: 1.5rem; border-radius: var(--radius); margin: 2rem 0; text-align: left;">
+                    <h3 style="margin-bottom: 1rem;">Booking Details</h3>
+                    <p><strong>Booking ID:</strong> IBBS-20231215-042</p>
+                    <p><strong>Route:</strong> Kampala → Gulu</p>
+                    <p><strong>Bus:</strong> Gateway Bus</p>
+                    <p><strong>Seat:</strong> 12A</p>
+                    <p><strong>Date:</strong> 15 Dec 2023</p>
+                    <p><strong>Departure Time:</strong> 08:00 AM</p>
+                    <p><strong>Passenger:</strong> John Doe</p>
+                </div>
+                
+                <p style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-sms" style="color: var(--primary);"></i> 
+                    An SMS with your booking details has been sent to 0700123456
+                </p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn btn-primary" id="printTicket">
+                        <i class="fas fa-print"></i> Print Ticket
+                    </button>
+                    <button class="btn btn-secondary" id="closeConfirmationModal">
+                        <i class="fas fa-home"></i> Return Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBBS Uganda</h3>
+                    <p>The easiest way to book bus tickets across Uganda. Connect with major bus companies and travel with confidence.</p>
+                    <div class="contact-info" style="margin-top: 1rem;">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+256 700 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@ibbs.ug</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Kampala, Uganda</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Book a Ticket</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-chevron-right"></i> My Bookings</a></li>
+                        <li><a href="bus_companies.html"><i class="fas fa-chevron-right"></i> Bus Companies</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Popular Routes</h3>
+                    <ul>
+                        <li><i class="fas fa-bus"></i> Kampala to Gulu</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Lira</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Mbale</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Arua</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Mbarara</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Bus Partners</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Gateway Bus</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Link Bus Services</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Kalita Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Trinity Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Volcano Buses</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Iracrates Bus Booking System. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Simplifying travel across Uganda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mock data for buses
+        const busesData = [
+            {
+                id: 1,
+                name: "Gateway Bus",
+                plate: "UBA 123A",
+                from: "Kampala",
+                to: "Gulu",
+                departure: "08:00 AM",
+                arrival: "02:00 PM",
+                duration: "6 hours",
+                price: 35000,
+                seats: 12,
+                capacity: 40,
+                amenities: ["AC", "WiFi", "TV", "Refreshments"]
+            },
+            {
+                id: 2,
+                name: "Link Bus Services",
+                plate: "UBB 456B",
+                from: "Kampala",
+                to: "Gulu",
+                departure: "10:00 AM",
+                arrival: "04:00 PM",
+                duration: "6 hours",
+                price: 32000,
+                seats: 8,
+                capacity: 38,
+                amenities: ["AC", "Water"]
+            },
+            {
+                id: 3,
+                name: "Kalita Buses",
+                plate: "UBC 789C",
+                from: "Kampala",
+                to: "Gulu",
+                departure: "02:00 PM",
+                arrival: "08:00 PM",
+                duration: "6 hours",
+                price: 30000,
+                seats: 5,
+                capacity: 42,
+                amenities: ["AC"]
+            },
+            {
+                id: 4,
+                name: "Gateway Bus",
+                plate: "UBD 101D",
+                from: "Kampala",
+                to: "Lira",
+                departure: "09:00 AM",
+                arrival: "03:00 PM",
+                duration: "6 hours",
+                price: 30000,
+                seats: 18,
+                capacity: 40,
+                amenities: ["AC", "WiFi"]
+            },
+            {
+                id: 5,
+                name: "Volcano Buses",
+                plate: "UBE 202E",
+                from: "Kampala",
+                to: "Mbale",
+                departure: "07:00 AM",
+                arrival: "12:00 PM",
+                duration: "5 hours",
+                price: 25000,
+                seats: 22,
+                capacity: 44,
+                amenities: ["AC", "TV"]
+            },
+            {
+                id: 6,
+                name: "Trinity Buses",
+                plate: "UBF 303F",
+                from: "Kampala",
+                to: "Arua",
+                departure: "08:30 AM",
+                arrival: "06:30 PM",
+                duration: "10 hours",
+                price: 40000,
+                seats: 3,
+                capacity: 36,
+                amenities: ["AC", "WiFi", "Meals"]
+            }
+        ];
+
+        // Mock data for booked seats
+        const bookedSeats = ["1A", "1D", "3B", "4C", "5A", "6D", "7B", "8A", "10C"];
+        const womenOnlySeats = ["2A", "2B", "2C", "2D"];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const searchForm = document.getElementById('searchForm');
+        const busesGrid = document.getElementById('busesGrid');
+        const seatModal = document.getElementById('seatModal');
+        const closeSeatModal = document.getElementById('closeSeatModal');
+        const seatLayout = document.getElementById('seatLayout');
+        const selectedSeatDisplay = document.getElementById('selectedSeatDisplay');
+        const proceedToPaymentBtn = document.getElementById('proceedToPayment');
+        const paymentModal = document.getElementById('paymentModal');
+        const closePaymentModal = document.getElementById('closePaymentModal');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const paymentDetails = document.getElementById('paymentDetails');
+        const confirmPaymentBtn = document.getElementById('confirmPayment');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeConfirmationModal = document.getElementById('closeConfirmationModal');
+        const printTicketBtn = document.getElementById('printTicket');
+        const paymentSeatNumber = document.getElementById('paymentSeatNumber');
+
+        // State variables
+        let selectedBus = null;
+        let selectedSeat = null;
+        let selectedPaymentMethod = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set travel date to tomorrow by default
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('travelDate').valueAsDate = tomorrow;
+            
+            // Load buses
+            renderBuses(busesData);
+            
+            // Generate seat layout
+            generateSeatLayout();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+
+            // Search form submission
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fromCity = document.getElementById('fromCity').value;
+                const toCity = document.getElementById('toCity').value;
+                const travelDate = document.getElementById('travelDate').value;
+                
+                if (!fromCity || !toCity || !travelDate) {
+                    alert('Please fill in all search fields');
+                    return;
+                }
+                
+                // Filter buses based on search
+                const filteredBuses = busesData.filter(bus => 
+                    bus.from === fromCity && bus.to === toCity
+                );
+                
+                if (filteredBuses.length === 0) {
+                    busesGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: var(--radius);">
+                            <i class="fas fa-bus-slash" style="font-size: 3rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                            <h3>No Buses Available</h3>
+                            <p>Sorry, no buses are available for this route on the selected date.</p>
+                            <p>Try searching for a different date or route.</p>
+                        </div>
+                    `;
+                } else {
+                    renderBuses(filteredBuses);
+                }
+            });
+
+            // Seat modal
+            closeSeatModal.addEventListener('click', function() {
+                seatModal.style.display = 'none';
+            });
+
+            // Seat selection
+            seatLayout.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('seat') || e.target.classList.contains('booked')) {
+                    return;
+                }
+                
+                // Remove selection from all seats
+                document.querySelectorAll('.seat.selected').forEach(seat => {
+                    seat.classList.remove('selected');
+                });
+                
+                // Select clicked seat
+                e.target.classList.add('selected');
+                selectedSeat = e.target.textContent;
+                selectedSeatDisplay.textContent = selectedSeat;
+                paymentSeatNumber.textContent = selectedSeat;
+                
+                // Enable proceed button
+                proceedToPaymentBtn.disabled = false;
+            });
+
+            // Proceed to payment
+            proceedToPaymentBtn.addEventListener('click', function() {
+                if (!selectedSeat) {
+                    alert('Please select a seat first');
+                    return;
+                }
+                
+                seatModal.style.display = 'none';
+                paymentModal.style.display = 'block';
+            });
+
+            // Payment modal
+            closePaymentModal.addEventListener('click', function() {
+                paymentModal.style.display = 'none';
+            });
+
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // Remove selection from all methods
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    
+                    // Select clicked method
+                    this.classList.add('selected');
+                    selectedPaymentMethod = this.dataset.method;
+                    
+                    // Show payment details
+                    paymentDetails.style.display = 'block';
+                });
+            });
+
+            // Confirm payment
+            confirmPaymentBtn.addEventListener('click', function() {
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                
+                if (!phoneNumber || !/^07\d{8}$/.test(phoneNumber)) {
+                    alert('Please enter a valid Ugandan phone number (07XXXXXXXX)');
+                    return;
+                }
+                
+                // Show confirmation modal
+                paymentModal.style.display = 'none';
+                confirmationModal.style.display = 'block';
+            });
+
+            // Confirmation modal
+            closeConfirmationModal.addEventListener('click', function() {
+                confirmationModal.style.display = 'none';
+                // Reset selection
+                selectedSeat = null;
+                selectedBus = null;
+                selectedPaymentMethod = null;
+            });
+
+            // Print ticket
+            printTicketBtn.addEventListener('click', function() {
+                window.print();
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === seatModal) {
+                    seatModal.style.display = 'none';
+                }
+                if (e.target === paymentModal) {
+                    paymentModal.style.display = 'none';
+                }
+                if (e.target === confirmationModal) {
+                    confirmationModal.style.display = 'none';
+                    // Reset selection
+                    selectedSeat = null;
+                    selectedBus = null;
+                    selectedPaymentMethod = null;
+                }
+            });
+        }
+
+        // Render buses to the grid
+        function renderBuses(buses) {
+            busesGrid.innerHTML = '';
+            
+            buses.forEach(bus => {
+                const busCard = document.createElement('div');
+                busCard.className = 'bus-card';
+                busCard.innerHTML = `
+                    <div class="bus-header">
+                        <div class="bus-name">${bus.name}</div>
+                        <div class="bus-plate">${bus.plate}</div>
+                    </div>
+                    <div class="bus-body">
+                        <div class="route-info">
+                            <div class="route-cities">
+                                <div class="from-to">${bus.from} → ${bus.to}</div>
+                                <div class="route-details">${bus.duration}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">UGX ${bus.price.toLocaleString()}</div>
+                                <div style="font-size: 0.9rem;">per seat</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bus-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Departure</div>
+                                <div class="detail-value">${bus.departure}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Arrival</div>
+                                <div class="detail-value">${bus.arrival}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Amenities</div>
+                                <div class="detail-value">${bus.amenities.slice(0, 2).join(', ')}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="seats-available">
+                            <i class="fas fa-chair"></i> ${bus.seats} seats available
+                        </div>
+                        
+                        <button class="btn btn-primary select-bus-btn" data-bus-id="${bus.id}" style="width: 100%;">
+                            <i class="fas fa-ticket-alt"></i> Select Bus
+                        </button>
+                    </div>
+                `;
+                
+                busesGrid.appendChild(busCard);
+            });
+            
+            // Add event listeners to "Select Bus" buttons
+            document.querySelectorAll('.select-bus-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const busId = parseInt(this.dataset.busId);
+                    selectedBus = buses.find(bus => bus.id === busId);
+                    
+                    // Update seat modal with bus info
+                    document.querySelector('.bus-info-summary h3').textContent = 
+                        `${selectedBus.from} → ${selectedBus.to}`;
+                    document.querySelector('.bus-info-summary p').innerHTML = 
+                        `<strong>${selectedBus.name}</strong> | Departure: ${selectedBus.departure}, 15 Dec 2023`;
+                    document.getElementById('seatPrice').textContent = 
+                        `UGX ${selectedBus.price.toLocaleString()}`;
+                    
+                    // Show seat modal
+                    seatModal.style.display = 'block';
+                });
+            });
+        }
+
+        // Generate seat layout
+        function generateSeatLayout() {
+            seatLayout.innerHTML = '';
+            
+            // Create 10 rows with 4 seats each
+            for (let row = 1; row <= 10; row++) {
+                for (let col = 1; col <= 4; col++) {
+                    const seatLetter = String.fromCharCode(64 + col); // A, B, C, D
+                    const seatNumber = `${row}${seatLetter}`;
+                    
+                    const seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.textContent = seatNumber;
+                    
+                    // Check seat status
+                    if (bookedSeats.includes(seatNumber)) {
+                        seat.classList.add('booked');
+                    } else if (womenOnlySeats.includes(seatNumber)) {
+                        seat.classList.add('women-only');
+                    } else {
+                        seat.classList.add('available');
+                    }
+                    
+                    seatLayout.appendChild(seat);
+                }
+            }
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-UG', {
+                style: 'currency',
+                currency: 'UGX',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+    </script>
+</body>
+</html>

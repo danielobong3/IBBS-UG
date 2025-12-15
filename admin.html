@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Operator Dashboard - IBBS Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 0 0 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .logo-subtext {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .company-info {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+        }
+
+        .company-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-status {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            margin-bottom: 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            font-size: 1rem;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            width: 22px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.2rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+            font-size: 1rem;
+            margin: 0 0.5rem;
+        }
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .logout-link i {
+            width: 22px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 1.5rem;
+            transition: margin-left 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            color: var(--secondary);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(45deg, #f3f4f6 25%, #e5e7eb 25%, #e5e7eb 50%, #f3f4f6 50%, #f3f4f6 75%, #e5e7eb 75%);
+            background-size: 20px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+
+        /* Tables */
+        .data-tables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f9fafb;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.75rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn.edit {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .action-btn.edit:hover {
+            background: #bfdbfe;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: #fecaca;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 90%;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Button Actions */
+        .btn-action {
+            padding: 1.5rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-action i {
+            font-size: 1.5rem;
+        }
+
+        .submit-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-tables {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-input {
+                width: 150px;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <i class="fas fa-bus"></i>
+            <div>
+                <div class="logo-text">IBBS</div>
+                <div class="logo-subtext">Operator Portal</div>
+            </div>
+        </div>
+        
+        <div class="company-info">
+            <div class="company-logo">
+                <i class="fas fa-bus-alt"></i>
+            </div>
+            <div class="company-name">Gateway Bus Co.</div>
+            <div class="company-status">Active</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="buses">
+                    <i class="fas fa-bus"></i>
+                    <span>Manage Buses</span>
+                    <span class="nav-badge">12</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="schedules">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedules</span>
+                    <span class="nav-badge">24</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="bookings">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Bookings</span>
+                    <span class="nav-badge">156</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="revenue">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Revenue</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="drivers">
+                    <i class="fas fa-users"></i>
+                    <span>Drivers</span>
+                    <span class="nav-badge">8</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="routes">
+                    <i class="fas fa-route"></i>
+                    <span>Routes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Logout at bottom -->
+        <div class="sidebar-footer">
+            <a href="login.html" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard Overview
+                </h1>
+            </div>
+            
+            <div class="top-bar-actions">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search..." aria-label="Search">
+                </div>
+                
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                
+                <div class="user-menu">
+                    <div class="user-avatar">GO</div>
+                    <div>
+                        <div style="font-weight: 600;">Gateway Operator</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #dbeafe; color: var(--primary);">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">UGX 4,250,000</div>
+                    <div class="stat-label">Today's Revenue</div>
+                    <div class="stat-change positive">+12.5% from yesterday</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #d1fae5; color: #065f46;">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Today's Bookings</div>
+                    <div class="stat-change positive">+8.3% from yesterday</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fef3c7; color: #92400e;">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Active Buses</div>
+                    <div class="stat-change negative">-1 from yesterday</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Seat Occupancy</div>
+                    <div class="stat-change positive">+2.1% from yesterday</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Revenue Trend (Last 7 Days)</div>
+                    <select class="form-control" style="width: auto;">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>This Month</option>
+                        <option>This Year</option>
+                    </select>
+                </div>
+                <div class="chart-placeholder">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <div>Revenue Chart would appear here</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Top Routes</div>
+                </div>
+                <div class="chart-placeholder">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <div>Route Distribution Chart</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="data-tables">
+            <!-- Recent Bookings Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title">Recent Bookings</div>
+                    <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">View All</a>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Route</th>
+                                <th>Passenger</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IBBS-20231215-042</td>
+                                <td>Kampala → Gulu</td>
+                                <td>John Doe</td>
+                                <td>UGX 35,000</td>
+                                <td><span class="status-badge status-active">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>IBBS-20231215-043</td>
+                                <td>Kampala → Mbale</td>
+                                <td>Sarah Smith</td>
+                                <td>UGX 25,000</td>
+                                <td><span class="status-badge status-active">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>IBBS-20231215-044</td>
+                                <td>Kampala → Lira</td>
+                                <td>Robert Johnson</td>
+                                <td>UGX 30,000</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>IBBS-20231215-045</td>
+                                <td>Gulu → Kampala</td>
+                                <td>Mary Williams</td>
+                                <td>UGX 35,000</td>
+                                <td><span class="status-badge status-cancelled">Cancelled</span></td>
+                            </tr>
+                            <tr>
+                                <td>IBBS-20231215-046</td>
+                                <td>Kampala → Arua</td>
+                                <td>David Brown</td>
+                                <td>UGX 40,000</td>
+                                <td><span class="status-badge status-active">Confirmed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bus Schedule Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-title">Today's Schedule</div>
+                    <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Add Schedule</a>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Route</th>
+                                <th>Bus</th>
+                                <th>Seats</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08:00 AM</td>
+                                <td>Kampala → Gulu</td>
+                                <td>UBA 123A</td>
+                                <td>38/40</td>
+                                <td><span class="status-badge status-active">On Time</span></td>
+                            </tr>
+                            <tr>
+                                <td>10:00 AM</td>
+                                <td>Kampala → Mbale</td>
+                                <td>UBB 456B</td>
+                                <td>35/38</td>
+                                <td><span class="status-badge status-active">Boarding</span></td>
+                            </tr>
+                            <tr>
+                                <td>02:00 PM</td>
+                                <td>Kampala → Lira</td>
+                                <td>UBC 789C</td>
+                                <td>40/42</td>
+                                <td><span class="status-badge status-pending">Delayed</span></td>
+                            </tr>
+                            <tr>
+                                <td>04:00 PM</td>
+                                <td>Kampala → Arua</td>
+                                <td>UBD 101D</td>
+                                <td>32/36</td>
+                                <td><span class="status-badge status-active">On Time</span></td>
+                            </tr>
+                            <tr>
+                                <td>06:00 PM</td>
+                                <td>Kampala → Gulu</td>
+                                <td>UBE 202E</td>
+                                <td>28/40</td>
+                                <td><span class="status-badge status-active">Scheduled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="table-card" style="margin-bottom: 2rem;">
+            <div class="table-header">
+                <div class="table-title">Quick Actions</div>
+            </div>
+            <div style="padding: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <button class="btn-action" id="addBusBtn" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+                    <i class="fas fa-plus"></i>
+                    <span>Add New Bus</span>
+                </button>
+                <button class="btn-action" id="createScheduleBtn" style="background: linear-gradient(135deg, var(--secondary), #0da271);">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Create Schedule</span>
+                </button>
+                <button class="btn-action" id="generateReportBtn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                    <i class="fas fa-file-export"></i>
+                    <span>Generate Report</span>
+                </button>
+                <button class="btn-action" id="viewAnalyticsBtn" style="background: linear-gradient(135deg, var(--warning), #d97706);">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>View Analytics</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Bus Modal -->
+    <div class="modal" id="addBusModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add New Bus</div>
+                <button class="close-modal" id="closeAddBusModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addBusForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="busPlate">Plate Number</label>
+                            <input type="text" class="form-control" id="busPlate" placeholder="e.g., UBA 123A" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="busName">Bus Name</label>
+                            <input type="text" class="form-control" id="busName" placeholder="e.g., Gateway Express" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="busCapacity">Capacity</label>
+                            <input type="number" class="form-control" id="busCapacity" placeholder="e.g., 40" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="busType">Bus Type</label>
+                            <select class="form-control" id="busType" required>
+                                <option value="">Select Type</option>
+                                <option value="standard">Standard</option>
+                                <option value="executive">Executive</option>
+                                <option value="coaster">Coaster</option>
+                                <option value="sleeper">Sleeper</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="busModel">Model</label>
+                            <input type="text" class="form-control" id="busModel" placeholder="e.g., Toyota Coaster">
+                        </div>
+                        <div class="form-group">
+                            <label for="busYear">Year</label>
+                            <input type="number" class="form-control" id="busYear" placeholder="e.g., 2020">
+                        </div>
+                        <div class="form-group">
+                            <label for="busColor">Color</label>
+                            <input type="text" class="form-control" id="busColor" placeholder="e.g., White/Blue">
+                        </div>
+                        <div class="form-group">
+                            <label for="busStatus">Status</label>
+                            <select class="form-control" id="busStatus" required>
+                                <option value="active">Active</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="busAmenities">Amenities (comma separated)</label>
+                        <input type="text" class="form-control" id="busAmenities" placeholder="e.g., AC, WiFi, TV, Charging Ports">
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="submit" class="submit-btn" style="flex: 2; background: linear-gradient(135deg, var(--secondary), #0da271);">
+                            <i class="fas fa-plus"></i> Add Bus
+                        </button>
+                        <button type="button" class="submit-btn" id="cancelAddBus" style="flex: 1; background: var(--gray);">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for bus companies
+        const busData = {
+            company: {
+                name: "Gateway Bus Co.",
+                totalBuses: 12,
+                activeBuses: 11,
+                totalDrivers: 8,
+                totalRoutes: 6,
+                monthlyRevenue: 125000000,
+                todayRevenue: 4250000,
+                todayBookings: 156,
+                occupancyRate: 94
+            },
+            bookings: [
+                { id: "IBBS-20231215-042", route: "Kampala → Gulu", passenger: "John Doe", amount: 35000, status: "confirmed" },
+                { id: "IBBS-20231215-043", route: "Kampala → Mbale", passenger: "Sarah Smith", amount: 25000, status: "confirmed" },
+                { id: "IBBS-20231215-044", route: "Kampala → Lira", passenger: "Robert Johnson", amount: 30000, status: "pending" },
+                { id: "IBBS-20231215-045", route: "Gulu → Kampala", passenger: "Mary Williams", amount: 35000, status: "cancelled" },
+                { id: "IBBS-20231215-046", route: "Kampala → Arua", passenger: "David Brown", amount: 40000, status: "confirmed" }
+            ],
+            schedules: [
+                { time: "08:00 AM", route: "Kampala → Gulu", bus: "UBA 123A", seats: "38/40", status: "on_time" },
+                { time: "10:00 AM", route: "Kampala → Mbale", bus: "UBB 456B", seats: "35/38", status: "boarding" },
+                { time: "02:00 PM", route: "Kampala → Lira", bus: "UBC 789C", seats: "40/42", status: "delayed" },
+                { time: "04:00 PM", route: "Kampala → Arua", bus: "UBD 101D", seats: "32/36", status: "on_time" },
+                { time: "06:00 PM", route: "Kampala → Gulu", bus: "UBE 202E", seats: "28/40", status: "scheduled" }
+            ],
+            buses: [
+                { plate: "UBA 123A", name: "Gateway Express", capacity: 40, type: "executive", status: "active" },
+                { plate: "UBB 456B", name: "Northern Star", capacity: 38, type: "standard", status: "active" },
+                { plate: "UBC 789C", name: "Mountain Rider", capacity: 42, type: "coaster", status: "active" },
+                { plate: "UBD 101D", name: "West Nile Express", capacity: 36, type: "sleeper", status: "maintenance" },
+                { plate: "UBE 202E", name: "Eastern Voyager", capacity: 40, type: "executive", status: "active" }
+            ]
+        };
+
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const addBusBtn = document.getElementById('addBusBtn');
+        const addBusModal = document.getElementById('addBusModal');
+        const closeAddBusModal = document.getElementById('closeAddBusModal');
+        const cancelAddBus = document.getElementById('cancelAddBus');
+        const addBusForm = document.getElementById('addBusForm');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Update dashboard stats
+            updateDashboardStats();
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Load page content
+                    loadPage(page);
+                    
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            });
+
+            // Add Bus button
+            addBusBtn.addEventListener('click', function() {
+                addBusModal.style.display = 'block';
+            });
+
+            // Close modal buttons
+            closeAddBusModal.addEventListener('click', function() {
+                addBusModal.style.display = 'none';
+            });
+
+            cancelAddBus.addEventListener('click', function() {
+                addBusModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === addBusModal) {
+                    addBusModal.style.display = 'none';
+                }
+            });
+
+            // Add bus form submission
+            addBusForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const plate = document.getElementById('busPlate').value;
+                const name = document.getElementById('busName').value;
+                const capacity = document.getElementById('busCapacity').value;
+                const type = document.getElementById('busType').value;
+                const status = document.getElementById('busStatus').value;
+                
+                // Add bus to data (in real app, this would be an API call)
+                busData.buses.push({
+                    plate: plate,
+                    name: name,
+                    capacity: capacity,
+                    type: type,
+                    status: status
+                });
+                
+                // Update company stats
+                busData.company.totalBuses++;
+                if (status === 'active') {
+                    busData.company.activeBuses++;
+                }
+                
+                // Update dashboard
+                updateDashboardStats();
+                
+                // Show success message
+                alert(`Bus ${plate} added successfully!`);
+                
+                // Reset form and close modal
+                addBusForm.reset();
+                addBusModal.style.display = 'none';
+            });
+
+            // Quick action buttons
+            document.getElementById('createScheduleBtn').addEventListener('click', function() {
+                alert('Create Schedule feature coming soon!');
+            });
+
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                generateReport();
+            });
+
+            document.getElementById('viewAnalyticsBtn').addEventListener('click', function() {
+                alert('Analytics dashboard coming soon!');
+            });
+        }
+
+        // Load page content
+        function loadPage(page) {
+            let pageTitle = '';
+            let pageContent = '';
+            
+            switch(page) {
+                case 'dashboard':
+                    pageTitle = 'Dashboard Overview';
+                    pageContent = getDashboardContent();
+                    break;
+                case 'buses':
+                    pageTitle = 'Manage Buses';
+                    pageContent = getBusesContent();
+                    break;
+                case 'schedules':
+                    pageTitle = 'Bus Schedules';
+                    pageContent = getSchedulesContent();
+                    break;
+                case 'bookings':
+                    pageTitle = 'Bookings Management';
+                    pageContent = getBookingsContent();
+                    break;
+                case 'revenue':
+                    pageTitle = 'Revenue Analysis';
+                    pageContent = getRevenueContent();
+                    break;
+                case 'drivers':
+                    pageTitle = 'Drivers Management';
+                    pageContent = getDriversContent();
+                    break;
+                case 'routes':
+                    pageTitle = 'Routes Management';
+                    pageContent = getRoutesContent();
+                    break;
+                case 'reports':
+                    pageTitle = 'Reports';
+                    pageContent = getReportsContent();
+                    break;
+                default:
+                    pageTitle = 'Dashboard Overview';
+                    pageContent = getDashboardContent();
+            }
+            
+            // Update page title
+            document.querySelector('.page-title').innerHTML = `
+                <i class="fas fa-${getPageIcon(page)}"></i>
+                ${pageTitle}
+            `;
+            
+            // Update main content
+            mainContent.innerHTML = `
+                <div class="top-bar">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <button class="mobile-toggle" id="mobileToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h1 class="page-title">
+                            <i class="fas fa-${getPageIcon(page)}"></i>
+                            ${pageTitle}
+                        </h1>
+                    </div>
+                    <div class="top-bar-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" placeholder="Search..." aria-label="Search">
+                        </div>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <div class="user-menu">
+                            <div class="user-avatar">GO</div>
+                            <div>
+                                <div style="font-weight: 600;">Gateway Operator</div>
+                                <div style="font-size: 0.8rem; color: var(--gray);">Admin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${pageContent}
+            `;
+            
+            // Re-attach mobile toggle event
+            document.getElementById('mobileToggle').addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+        }
+
+        // Get page icon
+        function getPageIcon(page) {
+            const icons = {
+                dashboard: 'tachometer-alt',
+                buses: 'bus',
+                schedules: 'calendar-alt',
+                bookings: 'ticket-alt',
+                revenue: 'money-bill-wave',
+                drivers: 'users',
+                routes: 'route',
+                reports: 'chart-bar'
+            };
+            return icons[page] || 'tachometer-alt';
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            // Update stats cards
+            document.querySelectorAll('.stat-value')[0].textContent = `UGX ${busData.company.todayRevenue.toLocaleString()}`;
+            document.querySelectorAll('.stat-value')[1].textContent = busData.company.todayBookings;
+            document.querySelectorAll('.stat-value')[2].textContent = busData.company.activeBuses;
+            document.querySelectorAll('.stat-value')[3].textContent = `${busData.company.occupancyRate}%`;
+            
+            // Update nav badges
+            document.querySelector('[data-page="buses"] .nav-badge').textContent = busData.company.totalBuses;
+            document.querySelector('[data-page="bookings"] .nav-badge').textContent = busData.company.todayBookings;
+        }
+
+        // Generate report
+        function generateReport() {
+            const reportDate = new Date().toLocaleDateString();
+            const reportContent = `
+                IBBS OPERATOR REPORT
+                ====================
+                Company: ${busData.company.name}
+                Date: ${reportDate}
+                
+                SUMMARY:
+                - Total Buses: ${busData.company.totalBuses}
+                - Active Buses: ${busData.company.activeBuses}
+                - Today's Revenue: UGX ${busData.company.todayRevenue.toLocaleString()}
+                - Today's Bookings: ${busData.company.todayBookings}
+                - Seat Occupancy: ${busData.company.occupancyRate}%
+                
+                RECENT BOOKINGS:
+                ${busData.bookings.map(booking => 
+                    `- ${booking.id}: ${booking.route} (${booking.passenger}) - UGX ${booking.amount}`
+                ).join('\n')}
+                
+                TODAY'S SCHEDULES:
+                ${busData.schedules.map(schedule => 
+                    `- ${schedule.time}: ${schedule.route} (${schedule.bus}) - ${schedule.seats} seats`
+                ).join('\n')}
+            `;
+            
+            // In a real app, this would generate and download a PDF/Excel file
+            // For demo, we'll just show an alert
+            alert('Report generated! Here are the details:\n\n' + reportContent);
+            
+            // Simulate download
+            console.log('Report content:', reportContent);
+        }
+
+        // Page content generators
+        function getDashboardContent() {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #dbeafe; color: var(--primary);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">UGX ${busData.company.todayRevenue.toLocaleString()}</div>
+                            <div class="stat-label">Today's Revenue</div>
+                            <div class="stat-change positive">+12.5% from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #d1fae5; color: #065f46;">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${busData.company.todayBookings}</div>
+                            <div class="stat-label">Today's Bookings</div>
+                            <div class="stat-change positive">+8.3% from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fef3c7; color: #92400e;">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${busData.company.activeBuses}</div>
+                            <div class="stat-label">Active Buses</div>
+                            <div class="stat-change negative">-1 from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${busData.company.occupancyRate}%</div>
+                            <div class="stat-label">Seat Occupancy</div>
+                            <div class="stat-change positive">+2.1% from yesterday</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Revenue Trend (Last 7 Days)</div>
+                            <select class="form-control" style="width: auto;">
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                                <option>This Month</option>
+                                <option>This Year</option>
+                            </select>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div style="text-align: center;">
+                                <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <div>Revenue Chart would appear here</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Top Routes</div>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div style="text-align: center;">
+                                <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <div>Route Distribution Chart</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-tables">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <div class="table-title">Recent Bookings</div>
+                            <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">View All</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Route</th>
+                                        <th>Passenger</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${busData.bookings.map(booking => `
+                                        <tr>
+                                            <td>${booking.id}</td>
+                                            <td>${booking.route}</td>
+                                            <td>${booking.passenger}</td>
+                                            <td>UGX ${booking.amount.toLocaleString()}</td>
+                                            <td><span class="status-badge status-${booking.status}">${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="table-header">
+                            <div class="table-title">Today's Schedule</div>
+                            <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 500;">Add Schedule</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Route</th>
+                                        <th>Bus</th>
+                                        <th>Seats</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${busData.schedules.map(schedule => `
+                                        <tr>
+                                            <td>${schedule.time}</td>
+                                            <td>${schedule.route}</td>
+                                            <td>${schedule.bus}</td>
+                                            <td>${schedule.seats}</td>
+                                            <td><span class="status-badge status-${schedule.status === 'on_time' ? 'active' : schedule.status === 'delayed' ? 'pending' : 'active'}">${schedule.status.replace('_', ' ').charAt(0).toUpperCase() + schedule.status.replace('_', ' ').slice(1)}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBusesContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">All Buses (${busData.buses.length})</div>
+                        <button class="action-btn edit" id="addNewBusBtn">
+                            <i class="fas fa-plus"></i> Add New Bus
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Plate Number</th>
+                                    <th>Bus Name</th>
+                                    <th>Capacity</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${busData.buses.map(bus => `
+                                    <tr>
+                                        <td>${bus.plate}</td>
+                                        <td>${bus.name}</td>
+                                        <td>${bus.capacity}</td>
+                                        <td>${bus.type.charAt(0).toUpperCase() + bus.type.slice(1)}</td>
+                                        <td><span class="status-badge status-${bus.status === 'active' ? 'active' : bus.status === 'maintenance' ? 'pending' : 'cancelled'}">${bus.status.charAt(0).toUpperCase() + bus.status.slice(1)}</span></td>
+                                        <td>
+                                            <button class="action-btn edit" data-bus="${bus.plate}">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="action-btn delete" data-bus="${bus.plate}">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSchedulesContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">All Schedules</div>
+                        <button class="action-btn edit">
+                            <i class="fas fa-plus"></i> Add Schedule
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Route</th>
+                                    <th>Bus</th>
+                                    <th>Driver</th>
+                                    <th>Seats Booked</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15 Dec 2023</td>
+                                    <td>08:00 AM</td>
+                                    <td>Kampala → Gulu</td>
+                                    <td>UBA 123A</td>
+                                    <td>John Okello</td>
+                                    <td>38/40</td>
+                                    <td><span class="status-badge status-active">On Time</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>15 Dec 2023</td>
+                                    <td>10:00 AM</td>
+                                    <td>Kampala → Mbale</td>
+                                    <td>UBB 456B</td>
+                                    <td>Sarah Nalwoga</td>
+                                    <td>35/38</td>
+                                    <td><span class="status-badge status-active">Boarding</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBookingsContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">All Bookings</div>
+                        <div>
+                            <select class="form-control" style="width: auto; display: inline-block;">
+                                <option>Today</option>
+                                <option>This Week</option>
+                                <option>This Month</option>
+                                <option>All Time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Date</th>
+                                    <th>Route</th>
+                                    <th>Passenger</th>
+                                    <th>Phone</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${busData.bookings.map(booking => `
+                                    <tr>
+                                        <td>${booking.id}</td>
+                                        <td>15 Dec 2023</td>
+                                        <td>${booking.route}</td>
+                                        <td>${booking.passenger}</td>
+                                        <td>0700XXXXXX</td>
+                                        <td>UGX ${booking.amount.toLocaleString()}</td>
+                                        <td>MTN MoMo</td>
+                                        <td><span class="status-badge status-${booking.status}">${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}</span></td>
+                                        <td>
+                                            <button class="action-btn edit">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRevenueContent() {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #dbeafe; color: var(--primary);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">UGX ${(busData.company.monthlyRevenue).toLocaleString()}</div>
+                            <div class="stat-label">Monthly Revenue</div>
+                            <div class="stat-change positive">+15.2% from last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #d1fae5; color: #065f46;">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">UGX ${(busData.company.todayRevenue * 30).toLocaleString()}</div>
+                            <div class="stat-label">Projected Monthly</div>
+                            <div class="stat-change positive">+8.7% from projection</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fef3c7; color: #92400e;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">UGX ${(busData.company.todayRevenue / busData.company.todayBookings).toLocaleString()}</div>
+                            <div class="stat-label">Average Ticket Price</div>
+                            <div class="stat-change positive">+3.1% from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">4.2%</div>
+                            <div class="stat-label">Cancellation Rate</div>
+                            <div class="stat-change negative">+0.5% from yesterday</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Revenue Breakdown by Route</div>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div style="text-align: center;">
+                            <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <div>Revenue breakdown chart would appear here</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getDriversContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">Drivers Management</div>
+                        <button class="action-btn edit">
+                            <i class="fas fa-plus"></i> Add Driver
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Driver ID</th>
+                                    <th>Name</th>
+                                    <th>License Number</th>
+                                    <th>Phone</th>
+                                    <th>Assigned Bus</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>DRV001</td>
+                                    <td>John Okello</td>
+                                    <td>UG123456789</td>
+                                    <td>0700123456</td>
+                                    <td>UBA 123A</td>
+                                    <td><span class="status-badge status-active">On Duty</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>DRV002</td>
+                                    <td>Sarah Nalwoga</td>
+                                    <td>UG987654321</td>
+                                    <td>0700654321</td>
+                                    <td>UBB 456B</td>
+                                    <td><span class="status-badge status-active">On Duty</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRoutesContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">Routes Management</div>
+                        <button class="action-btn edit">
+                            <i class="fas fa-plus"></i> Add Route
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Route ID</th>
+                                    <th>From → To</th>
+                                    <th>Distance</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Daily Trips</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RT001</td>
+                                    <td>Kampala → Gulu</td>
+                                    <td>340 km</td>
+                                    <td>6-7 hours</td>
+                                    <td>UGX 35,000</td>
+                                    <td>8</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>RT002</td>
+                                    <td>Kampala → Mbale</td>
+                                    <td>240 km</td>
+                                    <td>4-5 hours</td>
+                                    <td>UGX 25,000</td>
+                                    <td>6</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <button class="action-btn edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getReportsContent() {
+            return `
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Generate Reports</div>
+                    </div>
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div class="stat-card" onclick="generateReport()" style="cursor: pointer;">
+                                <div class="stat-icon" style="background: #dbeafe; color: var(--primary);">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Revenue Report</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Daily, weekly, monthly revenue reports</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card" style="cursor: pointer;">
+                                <div class="stat-icon" style="background: #d1fae5; color: #065f46;">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Booking Report</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Detailed booking analysis</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card" style="cursor: pointer;">
+                                <div class="stat-icon" style="background: #fef3c7; color: #92400e;">
+                                    <i class="fas fa-bus"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Bus Performance</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Bus utilization and performance</div>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="cursor: pointer;">
+                                <div class="stat-icon" style="background: #f3e8ff; color: #7c3aed;">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Driver Report</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Driver performance and schedules</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

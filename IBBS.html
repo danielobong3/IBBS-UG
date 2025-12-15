@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBBS Uganda - Super Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --secondary: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --info: #2563eb;
+            --dark: #111827;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 0 0 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-subtext {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            color: #93c5fd;
+        }
+
+        .admin-info {
+            padding: 0 1.5rem 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .admin-role {
+            display: inline-block;
+            background: rgba(5, 150, 105, 0.2);
+            color: #10b981;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 0 1rem 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(100vh - 400px);
+        }
+
+        .nav-item {
+            margin-bottom: 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin: 0 0.5rem;
+            min-height: 48px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-weight: 600;
+            border-left: 4px solid #10b981;
+        }
+
+        .nav-link i {
+            width: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.2rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            flex-shrink: 0;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #e5e7eb;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin: 0 0.5rem;
+            min-height: 48px;
+        }
+
+        .logout-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .logout-link i {
+            width: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 1.5rem;
+            transition: margin-left 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            width: 300px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            color: var(--secondary);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(45deg, #f3f4f6 25%, #e5e7eb 25%, #e5e7eb 50%, #f3f4f6 50%, #f3f4f6 75%, #e5e7eb 75%);
+            background-size: 20px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+
+        /* Tables */
+        .table-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f9fafb;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light-gray);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-verified {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-premium {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .action-btn.view {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .action-btn.view:hover {
+            background: #bfdbfe;
+        }
+
+        .action-btn.edit {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-btn.edit:hover {
+            background: #fde68a;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: #fecaca;
+        }
+
+        .action-btn.approve {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .action-btn.approve:hover {
+            background: #a7f3d0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            max-width: 900px;
+            width: 90%;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-stat {
+            background: white;
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .quick-stat:hover {
+            transform: translateY(-3px);
+        }
+
+        .quick-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .quick-stat-label {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .search-input {
+                width: 150px;
+            }
+            
+            .top-bar-actions {
+                flex-wrap: wrap;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--light-gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+                <div class="logo-text">IBBS Admin</div>
+                <div class="logo-subtext">Super Admin Dashboard</div>
+            </div>
+        </div>
+        
+        <div class="admin-info">
+            <div class="admin-avatar">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="admin-name">System Administrator</div>
+            <div class="admin-role">Super Admin</div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="overview">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Overview</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="passengers">
+                    <i class="fas fa-users"></i>
+                    <span>All Passengers</span>
+                    <span class="nav-badge">1,542</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="companies">
+                    <i class="fas fa-building"></i>
+                    <span>Bus Companies</span>
+                    <span class="nav-badge">24</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="bookings">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>All Bookings</span>
+                    <span class="nav-badge">2,156</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="buses">
+                    <i class="fas fa-bus"></i>
+                    <span>All Buses</span>
+                    <span class="nav-badge">186</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="routes">
+                    <i class="fas fa-route"></i>
+                    <span>Routes & Fares</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="payments">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Payments</span>
+                    <span class="nav-badge">UGX 124M</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="system">
+                    <i class="fas fa-cogs"></i>
+                    <span>System Settings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="support">
+                    <i class="fas fa-headset"></i>
+                    <span>Support Tickets</span>
+                    <span class="nav-badge">12</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    System Overview
+                </h1>
+            </div>
+            
+            <div class="top-bar-actions">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search everything..." aria-label="Search">
+                </div>
+                
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                
+                <div style="font-size: 0.9rem; color: var(--gray);">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard content will be loaded here -->
+        <div id="pageContent">
+            <!-- Overview page will be loaded here by default -->
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- View Passenger Modal -->
+    <div class="modal" id="viewPassengerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Passenger Details</div>
+                <button class="close-modal" onclick="closeModal('viewPassengerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="passengerDetails">
+                    <!-- Passenger details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Company Modal -->
+    <div class="modal" id="viewCompanyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Bus Company Details</div>
+                <button class="close-modal" onclick="closeModal('viewCompanyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="companyDetails">
+                    <!-- Company details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Booking Modal -->
+    <div class="modal" id="viewBookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Booking Details</div>
+                <button class="close-modal" onclick="closeModal('viewBookingModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="bookingDetails">
+                    <!-- Booking details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Company Modal -->
+    <div class="modal" id="addCompanyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Register New Bus Company</div>
+                <button class="close-modal" onclick="closeModal('addCompanyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addCompanyForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="companyName">Company Name *</label>
+                            <input type="text" class="form-control" id="companyName" placeholder="e.g., Gateway Bus Co." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyEmail">Email *</label>
+                            <input type="email" class="form-control" id="companyEmail" placeholder="contact@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyPhone">Phone *</label>
+                            <input type="tel" class="form-control" id="companyPhone" placeholder="+256 700 123 456" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyLocation">Location *</label>
+                            <input type="text" class="form-control" id="companyLocation" placeholder="Kampala, Uganda" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyType">Company Type</label>
+                            <select class="form-control" id="companyType">
+                                <option value="premium">Premium Partner</option>
+                                <option value="standard">Standard Partner</option>
+                                <option value="basic">Basic Partner</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyStatus">Status</label>
+                            <select class="form-control" id="companyStatus">
+                                <option value="active">Active</option>
+                                <option value="pending">Pending Approval</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="companyDescription">Description</label>
+                        <textarea class="form-control" id="companyDescription" rows="3" placeholder="Brief description of the company..."></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 2;">
+                            <i class="fas fa-plus"></i> Register Company
+                        </button>
+                        <button type="button" class="btn" onclick="closeModal('addCompanyModal')" style="flex: 1; background: var(--light-gray);">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application Data
+        const systemData = {
+            overview: {
+                totalPassengers: 1542,
+                totalCompanies: 24,
+                activeBookings: 2156,
+                totalBuses: 186,
+                totalRevenue: 124500000,
+                activeRoutes: 42,
+                todayBookings: 156,
+                todayRevenue: 4250000,
+                pendingApprovals: 8,
+                supportTickets: 12
+            },
+            passengers: [
+                {
+                    id: 1,
+                    name: "John Doe",
+                    email: "john@example.com",
+                    phone: "+256 700 123 456",
+                    bookings: 12,
+                    totalSpent: 420000,
+                    status: "active",
+                    joined: "2023-01-15",
+                    location: "Kampala"
+                },
+                {
+                    id: 2,
+                    name: "Sarah Smith",
+                    email: "sarah@example.com",
+                    phone: "+256 701 234 567",
+                    bookings: 8,
+                    totalSpent: 280000,
+                    status: "active",
+                    joined: "2023-03-22",
+                    location: "Gulu"
+                },
+                {
+                    id: 3,
+                    name: "Robert Johnson",
+                    email: "robert@example.com",
+                    phone: "+256 702 345 678",
+                    bookings: 5,
+                    totalSpent: 175000,
+                    status: "inactive",
+                    joined: "2023-05-10",
+                    location: "Mbale"
+                }
+            ],
+            companies: [
+                {
+                    id: 1,
+                    name: "Gateway Bus Co.",
+                    email: "info@gatewaybus.com",
+                    phone: "+256 700 111 222",
+                    location: "Kampala",
+                    buses: 12,
+                    routes: 6,
+                    rating: 4.8,
+                    status: "active",
+                    type: "premium",
+                    joined: "2022-11-05"
+                },
+                {
+                    id: 2,
+                    name: "Northern Express",
+                    email: "contact@northernexpress.com",
+                    phone: "+256 700 222 333",
+                    location: "Gulu",
+                    buses: 8,
+                    routes: 4,
+                    rating: 4.5,
+                    status: "active",
+                    type: "standard",
+                    joined: "2023-02-15"
+                },
+                {
+                    id: 3,
+                    name: "Eastern Voyager",
+                    email: "info@easternvoyager.com",
+                    phone: "+256 700 333 444",
+                    location: "Mbale",
+                    buses: 6,
+                    routes: 3,
+                    rating: 4.2,
+                    status: "pending",
+                    type: "basic",
+                    joined: "2023-06-20"
+                }
+            ],
+            bookings: [
+                {
+                    id: "IBBS-20231215-101",
+                    passenger: "John Doe",
+                    company: "Gateway Bus Co.",
+                    route: "Kampala → Gulu",
+                    date: "2023-12-15",
+                    time: "08:00 AM",
+                    seats: 2,
+                    amount: 70000,
+                    payment: "MTN MoMo",
+                    status: "confirmed"
+                },
+                {
+                    id: "IBBS-20231215-102",
+                    passenger: "Sarah Smith",
+                    company: "Northern Express",
+                    route: "Kampala → Mbale",
+                    date: "2023-12-16",
+                    time: "10:00 AM",
+                    seats: 1,
+                    amount: 25000,
+                    payment: "Airtel Money",
+                    status: "pending"
+                }
+            ]
+        };
+
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageContent = document.getElementById('pageContent');
+        const currentDate = document.getElementById('currentDate');
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateCurrentDate();
+            loadPage('overview');
+        });
+
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Load page content
+                    loadPage(page);
+                    
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 992) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            });
+
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+
+            // Add company form
+            document.getElementById('addCompanyForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const company = {
+                    id: systemData.companies.length + 1,
+                    name: document.getElementById('companyName').value,
+                    email: document.getElementById('companyEmail').value,
+                    phone: document.getElementById('companyPhone').value,
+                    location: document.getElementById('companyLocation').value,
+                    type: document.getElementById('companyType').value,
+                    status: document.getElementById('companyStatus').value,
+                    buses: 0,
+                    routes: 0,
+                    rating: 0,
+                    joined: new Date().toISOString().split('T')[0]
+                };
+                
+                systemData.companies.push(company);
+                systemData.overview.totalCompanies++;
+                
+                alert(`Company ${company.name} registered successfully!`);
+                closeModal('addCompanyModal');
+                loadPage('companies');
+            });
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            currentDate.textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        function loadPage(page) {
+            let content = '';
+            
+            switch(page) {
+                case 'overview':
+                    content = getOverviewContent();
+                    break;
+                case 'passengers':
+                    content = getPassengersContent();
+                    break;
+                case 'companies':
+                    content = getCompaniesContent();
+                    break;
+                case 'bookings':
+                    content = getBookingsContent();
+                    break;
+                case 'buses':
+                    content = getBusesContent();
+                    break;
+                case 'routes':
+                    content = getRoutesContent();
+                    break;
+                case 'payments':
+                    content = getPaymentsContent();
+                    break;
+                case 'reports':
+                    content = getReportsContent();
+                    break;
+                case 'system':
+                    content = getSystemContent();
+                    break;
+                case 'support':
+                    content = getSupportContent();
+                    break;
+                default:
+                    content = getOverviewContent();
+            }
+            
+            pageContent.innerHTML = content;
+            updatePageTitle(page);
+        }
+
+        function updatePageTitle(page) {
+            const titles = {
+                overview: 'System Overview',
+                passengers: 'All Passengers',
+                companies: 'Bus Companies',
+                bookings: 'All Bookings',
+                buses: 'All Buses',
+                routes: 'Routes & Fares',
+                payments: 'Payment Transactions',
+                reports: 'Analytics & Reports',
+                system: 'System Settings',
+                support: 'Support Tickets'
+            };
+            
+            const icons = {
+                overview: 'tachometer-alt',
+                passengers: 'users',
+                companies: 'building',
+                bookings: 'ticket-alt',
+                buses: 'bus',
+                routes: 'route',
+                payments: 'money-bill-wave',
+                reports: 'chart-bar',
+                system: 'cogs',
+                support: 'headset'
+            };
+            
+            document.querySelector('.page-title').innerHTML = `
+                <i class="fas fa-${icons[page]}"></i>
+                ${titles[page]}
+            `;
+        }
+
+        function getOverviewContent() {
+            const stats = systemData.overview;
+            
+            return `
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${stats.todayBookings}</div>
+                        <div class="quick-stat-label">Today's Bookings</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">UGX ${(stats.todayRevenue / 1000000).toFixed(1)}M</div>
+                        <div class="quick-stat-label">Today's Revenue</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${stats.pendingApprovals}</div>
+                        <div class="quick-stat-label">Pending Approvals</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${stats.supportTickets}</div>
+                        <div class="quick-stat-label">Open Tickets</div>
+                    </div>
+                </div>
+
+                <!-- Main Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${stats.totalPassengers.toLocaleString()}</div>
+                            <div class="stat-label">Total Passengers</div>
+                            <div class="stat-change positive">+5.2% from last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${stats.totalCompanies}</div>
+                            <div class="stat-label">Bus Companies</div>
+                            <div class="stat-change positive">+2 new this month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">${stats.activeBookings.toLocaleString()}</div>
+                            <div class="stat-label">Active Bookings</div>
+                            <div class="stat-change positive">+12.5% from yesterday</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">UGX ${(stats.totalRevenue / 1000000).toFixed(1)}M</div>
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-change positive">+8.7% from last month</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Booking Trend (Last 7 Days)</div>
+                            <select class="form-control" style="width: auto;">
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                                <option>This Year</option>
+                            </select>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div style="text-align: center;">
+                                <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <div>Booking trend chart would appear here</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Revenue Distribution</div>
+                        </div>
+                        <div class="chart-placeholder">
+                            <div style="text-align: center;">
+                                <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <div>Revenue distribution chart</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">Recent Activity</div>
+                        <button class="btn btn-primary" onclick="loadPage('bookings')">
+                            <i class="fas fa-eye"></i> View All
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>User/Company</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10:30 AM</td>
+                                    <td>New Booking</td>
+                                    <td>John Doe</td>
+                                    <td>Kampala → Gulu (2 seats)</td>
+                                    <td><span class="status-badge status-active">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>09:15 AM</td>
+                                    <td>Company Registration</td>
+                                    <td>Eastern Voyager</td>
+                                    <td>New bus company registered</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Yesterday</td>
+                                    <td>Payment Received</td>
+                                    <td>Gateway Bus Co.</td>
+                                    <td>UGX 2,450,000 commission</td>
+                                    <td><span class="status-badge status-active">Verified</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Yesterday</td>
+                                    <td>Support Ticket</td>
+                                    <td>Sarah Smith</td>
+                                    <td>Ticket #ST-20231215-001</td>
+                                    <td><span class="status-badge status-pending">Open</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPassengersContent() {
+            return `
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>All</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Location:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>All Locations</option>
+                            <option>Kampala</option>
+                            <option>Gulu</option>
+                            <option>Mbale</option>
+                            <option>Lira</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort by:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>Most Bookings</option>
+                            <option>Recently Joined</option>
+                            <option>Highest Spending</option>
+                        </select>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Passengers Table -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">All Passengers (${systemData.passengers.length})</div>
+                        <div class="table-actions">
+                            <input type="text" class="form-control" placeholder="Search passengers..." aria-label="Search passengers" style="width: 200px;">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Passenger</th>
+                                    <th>Contact</th>
+                                    <th>Location</th>
+                                    <th>Bookings</th>
+                                    <th>Total Spent</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${systemData.passengers.map(passenger => `
+                                    <tr>
+                                        <td>#${passenger.id.toString().padStart(4, '0')}</td>
+                                        <td>
+                                            <div style="font-weight: 600;">${passenger.name}</div>
+                                            <div style="font-size: 0.85rem; color: var(--gray);">${passenger.email}</div>
+                                        </td>
+                                        <td>${passenger.phone}</td>
+                                        <td>${passenger.location}</td>
+                                        <td>${passenger.bookings}</td>
+                                        <td>UGX ${passenger.totalSpent.toLocaleString()}</td>
+                                        <td>
+                                            <span class="status-badge status-${passenger.status}">
+                                                ${passenger.status.charAt(0).toUpperCase() + passenger.status.slice(1)}
+                                            </span>
+                                        </td>
+                                        <td>${new Date(passenger.joined).toLocaleDateString()}</td>
+                                        <td>
+                                            <button class="action-btn view" onclick="viewPassenger(${passenger.id})">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button class="action-btn edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.overview.totalPassengers.toLocaleString()}</div>
+                        <div class="quick-stat-label">Total Passengers</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.passengers.filter(p => p.status === 'active').length}</div>
+                        <div class="quick-stat-label">Active Passengers</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.passengers.reduce((sum, p) => sum + p.bookings, 0)}</div>
+                        <div class="quick-stat-label">Total Bookings</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">UGX ${systemData.passengers.reduce((sum, p) => sum + p.totalSpent, 0).toLocaleString()}</div>
+                        <div class="quick-stat-label">Total Revenue</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCompaniesContent() {
+            return `
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>All</option>
+                            <option>Active</option>
+                            <option>Pending</option>
+                            <option>Suspended</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Type:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>All Types</option>
+                            <option>Premium</option>
+                            <option>Standard</option>
+                            <option>Basic</option>
+                        </select>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <button class="btn btn-primary" onclick="openModal('addCompanyModal')">
+                            <i class="fas fa-plus"></i> Add Company
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Companies Table -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">Bus Companies (${systemData.companies.length})</div>
+                        <div class="table-actions">
+                            <input type="text" class="form-control" placeholder="Search companies..." style="width: 200px;" aria-label="Search companies">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Company</th>
+                                    <th>Contact</th>
+                                    <th>Location</th>
+                                    <th>Buses</th>
+                                    <th>Rating</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${systemData.companies.map(company => `
+                                    <tr>
+                                        <td>#${company.id.toString().padStart(3, '0')}</td>
+                                        <td>
+                                            <div style="font-weight: 600;">${company.name}</div>
+                                            <div style="font-size: 0.85rem; color: var(--gray);">${company.email}</div>
+                                        </td>
+                                        <td>${company.phone}</td>
+                                        <td>${company.location}</td>
+                                        <td>${company.buses}</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                                <span style="color: #f59e0b;">${'★'.repeat(Math.floor(company.rating))}${'☆'.repeat(5 - Math.floor(company.rating))}</span>
+                                                <span style="font-size: 0.85rem; color: var(--gray);">${company.rating}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-${company.type}">
+                                                ${company.type.charAt(0).toUpperCase() + company.type.slice(1)}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-${company.status}">
+                                                ${company.status.charAt(0).toUpperCase() + company.status.slice(1)}
+                                            </span>
+                                        </td>
+                                        <td>${new Date(company.joined).toLocaleDateString()}</td>
+                                        <td>
+                                            <button class="action-btn view" onclick="viewCompany(${company.id})">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button class="action-btn edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            ${company.status === 'pending' ? `
+                                                <button class="action-btn approve">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            ` : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.companies.length}</div>
+                        <div class="quick-stat-label">Total Companies</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.companies.filter(c => c.status === 'active').length}</div>
+                        <div class="quick-stat-label">Active Companies</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.companies.reduce((sum, c) => sum + c.buses, 0)}</div>
+                        <div class="quick-stat-label">Total Buses</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.companies.filter(c => c.type === 'premium').length}</div>
+                        <div class="quick-stat-label">Premium Partners</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBookingsContent() {
+            return `
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select class="form-control" style="width: 150px;">
+                            <option>All</option>
+                            <option>Confirmed</option>
+                            <option>Pending</option>
+                            <option>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Date Range:</label>
+                        <input type="date" class="form-control" style="width: 150px;" aria-label="Start date">
+                        <span>to</span>
+                        <input type="date" class="form-control" style="width: 150px;" aria-label="End date">
+                    </div>
+                    <div style="margin-left: auto;">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bookings Table -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">All Bookings (${systemData.bookings.length})</div>
+                        <div class="table-actions">
+                            <input type="text" class="form-control" placeholder="Search bookings..." aria-label="Search bookings" style="width: 200px;">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Passenger</th>
+                                    <th>Company</th>
+                                    <th>Route</th>
+                                    <th>Date & Time</th>
+                                    <th>Seats</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${systemData.bookings.map(booking => `
+                                    <tr>
+                                        <td>${booking.id}</td>
+                                        <td>${booking.passenger}</td>
+                                        <td>${booking.company}</td>
+                                        <td>${booking.route}</td>
+                                        <td>
+                                            <div>${new Date(booking.date).toLocaleDateString()}</div>
+                                            <div style="font-size: 0.85rem; color: var(--gray);">${booking.time}</div>
+                                        </td>
+                                        <td>${booking.seats}</td>
+                                        <td>UGX ${booking.amount.toLocaleString()}</td>
+                                        <td>${booking.payment}</td>
+                                        <td>
+                                            <span class="status-badge status-${booking.status}">
+                                                ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="action-btn view" onclick="viewBooking('${booking.id}')">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button class="action-btn delete">
+                                                <i class="fas fa-print"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.bookings.length}</div>
+                        <div class="quick-stat-label">Total Bookings</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">UGX ${systemData.bookings.reduce((sum, b) => sum + b.amount, 0).toLocaleString()}</div>
+                        <div class="quick-stat-label">Total Amount</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.bookings.filter(b => b.status === 'confirmed').length}</div>
+                        <div class="quick-stat-label">Confirmed</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="quick-stat-value">${systemData.bookings.filter(b => b.status === 'pending').length}</div>
+                        <div class="quick-stat-label">Pending</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getBusesContent() {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-bus"></i>
+                    <h3>All Buses Management</h3>
+                    <p>View and manage all buses across all companies</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-search"></i> Explore Buses
+                    </button>
+                </div>
+            `;
+        }
+
+        function getRoutesContent() {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-route"></i>
+                    <h3>Routes & Fares Management</h3>
+                    <p>Configure routes, distances, and fare pricing</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-cog"></i> Configure Routes
+                    </button>
+                </div>
+            `;
+        }
+
+        function getPaymentsContent() {
+            return `
+                <div class="empty-state">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Payment Transactions</h3>
+                    <p>Monitor all payment transactions across the system</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-chart-line"></i> View Transactions
+                    </button>
+                </div>
+            `;
+        }
+
+        function getReportsContent() {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="generateReport('performance')" style="cursor: pointer;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">System Performance</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">Server uptime, response times, errors</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">User Analytics</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">Demographics, behavior, retention</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Company Reports</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">Performance, revenue, compliance</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" style="cursor: pointer;">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Financial Reports</div>
+                            <div style="font-size: 0.9rem; color: var(--gray);">Revenue, commissions, expenses</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">System Analytics Dashboard</div>
+                        <select class="form-control" style="width: auto;">
+                            <option>Last 30 Days</option>
+                            <option>Last Quarter</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+                    <div class="chart-placeholder">
+                        <div style="text-align: center; padding: 4rem;">
+                            <i class="fas fa-chart-bar" style="font-size: 4rem; margin-bottom: 1rem; color: var(--light-gray);"></i>
+                            <h3>Advanced Analytics</h3>
+                            <p>Generate custom reports and analytics</p>
+                            <button class="btn btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-file-export"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSystemContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">System Configuration</div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <div style="padding: 2rem;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>System Name</label>
+                                    <input type="text" class="form-control" value="IBBS Uganda" placeholder="System Name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Commission Rate (%)</label>
+                                    <input type="number" class="form-control" value="10" min="0" max="50" step="0.5">
+                                </div>
+                                <div class="form-group">
+                                    <label>Booking Window (Days)</label>
+                                    <input type="number" class="form-control" value="30" min="1" max="365" aria-label="Booking window (days)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Default Currency</label>
+                                    <select class="form-control">
+                                        <option>UGX - Ugandan Shilling</option>
+                                        <option>USD - US Dollar</option>
+                                        <option>KES - Kenyan Shilling</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 2rem;">
+                                <label>System Maintenance Mode</label>
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="radio" name="maintenance" checked aria-label="Active"> Active
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="radio" name="maintenance" aria-label="Maintenance"> Maintenance
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 2rem;">
+                                <label>Email Notifications</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" checked aria-label="New booking notifications"> New booking notifications
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" checked aria-label="Payment notifications"> Payment notifications
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="checkbox" checked aria-label="System alerts"> System alerts
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSupportContent() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">Support Tickets (${systemData.overview.supportTickets})</div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Ticket
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Subject</th>
+                                    <th>User/Company</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Last Update</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ST-001</td>
+                                    <td>Payment not received</td>
+                                    <td>Gateway Bus Co.</td>
+                                    <td><span style="color: #dc2626; font-weight: 600;">High</span></td>
+                                    <td><span class="status-badge status-pending">Open</span></td>
+                                    <td>2 hours ago</td>
+                                    <td>1 hour ago</td>
+                                    <td>
+                                        <button class="action-btn view">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ST-002</td>
+                                    <td>Booking cancellation issue</td>
+                                    <td>John Doe</td>
+                                    <td><span style="color: #d97706; font-weight: 600;">Medium</span></td>
+                                    <td><span class="status-badge status-active">In Progress</span></td>
+                                    <td>1 day ago</td>
+                                    <td>5 hours ago</td>
+                                    <td>
+                                        <button class="action-btn view">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewPassenger(id) {
+            const passenger = systemData.passengers.find(p => p.id === id);
+            if (passenger) {
+                document.getElementById('passengerDetails').innerHTML = `
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--light-gray);">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                ${passenger.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 0.25rem;">${passenger.name}</h3>
+                                <div style="color: var(--gray);">Passenger #${id.toString().padStart(4, '0')}</div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${passenger.email}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${passenger.phone}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${passenger.location}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div style="padding: 0.75rem;">
+                                    <span class="status-badge status-${passenger.status}">
+                                        ${passenger.status.charAt(0).toUpperCase() + passenger.status.slice(1)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Total Bookings</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius); font-size: 1.2rem; font-weight: bold; text-align: center;">${passenger.bookings}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Spent</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius); font-size: 1.2rem; font-weight: bold; text-align: center;">UGX ${passenger.totalSpent.toLocaleString()}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Joined Date</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${new Date(passenger.joined).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                            <button class="btn" style="flex: 1; background: var(--light-gray);" onclick="closeModal('viewPassengerModal')">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                `;
+                openModal('viewPassengerModal');
+            }
+        }
+
+        function viewCompany(id) {
+            const company = systemData.companies.find(c => c.id === id);
+            if (company) {
+                document.getElementById('companyDetails').innerHTML = `
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--light-gray);">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                                ${company.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 0.25rem;">${company.name}</h3>
+                                <div style="color: var(--gray);">Company #${id.toString().padStart(3, '0')}</div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${company.email}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${company.phone}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${company.location}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Company Type</label>
+                                <div style="padding: 0.75rem;">
+                                    <span class="status-badge status-${company.type}">
+                                        ${company.type.charAt(0).toUpperCase() + company.type.slice(1)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div style="padding: 0.75rem;">
+                                    <span class="status-badge status-${company.status}">
+                                        ${company.status.charAt(0).toUpperCase() + company.status.slice(1)}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Rating</label>
+                                <div style="padding: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="color: #f59e0b; font-size: 1.2rem;">${'★'.repeat(Math.floor(company.rating))}${'☆'.repeat(5 - Math.floor(company.rating))}</span>
+                                    <span>${company.rating}/5.0</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Buses</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius); font-size: 1.2rem; font-weight: bold; text-align: center;">${company.buses}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Active Routes</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius); font-size: 1.2rem; font-weight: bold; text-align: center;">${company.routes}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-edit"></i> Edit Company
+                            </button>
+                            ${company.status === 'pending' ? `
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                            ` : ''}
+                            <button class="btn" style="flex: 1; background: var(--light-gray);" onclick="closeModal('viewCompanyModal')">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                `;
+                openModal('viewCompanyModal');
+            }
+        }
+
+        function viewBooking(id) {
+            const booking = systemData.bookings.find(b => b.id === id);
+            if (booking) {
+                document.getElementById('bookingDetails').innerHTML = `
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #f9fafb, #e5e7eb); padding: 1.5rem; border-radius: var(--radius);">
+                            <h3 style="margin-bottom: 1rem;">Booking #${booking.id}</h3>
+                            <div style="display: flex; align-items: center; gap: 2rem;">
+                                <div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Status</div>
+                                    <span class="status-badge status-${booking.status}" style="font-size: 1rem;">
+                                        ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                    </span>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.9rem; color: var(--gray);">Amount</div>
+                                    <div style="font-size: 1.2rem; font-weight: bold;">UGX ${booking.amount.toLocaleString()}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Passenger</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${booking.passenger}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Bus Company</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${booking.company}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Route</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${booking.route}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${booking.payment}</div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Travel Date</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${new Date(booking.date).toLocaleDateString()}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Departure Time</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius);">${booking.time}</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Seats</label>
+                                <div style="padding: 0.75rem; background: #f9fafb; border-radius: var(--radius); font-size: 1.2rem; font-weight: bold; text-align: center;">${booking.seats}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-print"></i> Print Ticket
+                            </button>
+                            <button class="btn" style="flex: 1; background: var(--light-gray);" onclick="closeModal('viewBookingModal')">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                `;
+                openModal('viewBookingModal');
+            }
+        }
+
+        function generateReport(type) {
+            const reports = {
+                performance: 'System Performance Report:\n\n• Server Uptime: 99.8%\n• Avg Response Time: 245ms\n• Error Rate: 0.2%\n• Active Users: 1,542\n• Peak Hours: 8:00-10:00 AM',
+                revenue: 'Financial Report:\n\n• Total Revenue: UGX 124.5M\n• Commission Earned: UGX 12.4M\n• Top Company: Gateway Bus Co.\n• Avg Booking Value: UGX 32,500\n• Growth Rate: +12.5% MoM'
+            };
+            
+            alert(reports[type] || 'Report generation not implemented yet');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

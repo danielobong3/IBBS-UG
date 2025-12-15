@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Routes - IBBS Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0da271;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Routes Controls */
+        .routes-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Routes Grid */
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .route-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .route-card.popular::before {
+            content: "POPULAR";
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: var(--warning);
+            color: white;
+            padding: 0.25rem 2rem;
+            transform: rotate(45deg);
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .route-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .route-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .route-cities {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .route-distance {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .route-body {
+            padding: 1.5rem;
+        }
+
+        .route-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bus-companies {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: var(--radius);
+        }
+
+        .companies-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .companies-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .company-tag {
+            background: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .company-tag i {
+            color: var(--primary);
+        }
+
+        /* Route Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 90%;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Route Map */
+        .route-map {
+            height: 200px;
+            background: #e5e7eb;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-dots {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            position: relative;
+        }
+
+        .map-dots::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--primary);
+            transform: translateY(-50%);
+        }
+
+        .map-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-dot.start::after,
+        .map-dot.end::after {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+            margin-top: 0.5rem;
+        }
+
+        .map-dot.start::after {
+            content: attr(data-city);
+        }
+
+        .map-dot.end::after {
+            content: attr(data-city);
+        }
+
+        /* Schedule Table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .schedule-table th {
+            background: #f3f4f6;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .schedule-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .schedule-table tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav li {
+                width: 100%;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.75rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .routes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 1rem auto;
+            }
+            
+            .schedule-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-bus"></i>
+                        <span>IBBS Uganda</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="routes.html" class="active"><i class="fas fa-route"></i> Routes</a></li>
+                        <li><a href="bus_companies.html" class="active"><i class="fas fa-bus-alt"></i> Bus Companies</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-menu">
+                    <button class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-user"></i> Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Explore Bus Routes Across Uganda</h1>
+            <p>Find detailed information about all available bus routes, schedules, prices, and bus companies operating on each route.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Routes Controls -->
+        <section class="routes-controls">
+            <h2 class="section-title" style="margin-bottom: 1.5rem;">
+                <i class="fas fa-filter"></i> Filter Routes
+            </h2>
+            
+            <div class="controls-row">
+                <div class="form-group">
+                    <label for="searchRoute"><i class="fas fa-search"></i> Search Route</label>
+                    <input type="text" class="form-control" id="searchRoute" placeholder="Enter city name or route...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fromCity"><i class="fas fa-map-marker-alt"></i> From City</label>
+                    <select class="form-control" id="fromCity">
+                        <option value="">All Cities</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Gulu">Gulu</option>
+                        <option value="Lira">Lira</option>
+                        <option value="Mbale">Mbale</option>
+                        <option value="Arua">Arua</option>
+                        <option value="Mbarara">Mbarara</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Fort Portal">Fort Portal</option>
+                        <option value="Masaka">Masaka</option>
+                        <option value="Hoima">Hoima</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="toCity"><i class="fas fa-map-marker"></i> To City</label>
+                    <select class="form-control" id="toCity">
+                        <option value="">All Cities</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Gulu">Gulu</option>
+                        <option value="Lira">Lira</option>
+                        <option value="Mbale">Mbale</option>
+                        <option value="Arua">Arua</option>
+                        <option value="Mbarara">Mbarara</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Fort Portal">Fort Portal</option>
+                        <option value="Masaka">Masaka</option>
+                        <option value="Hoima">Hoima</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="controls-row">
+                <div class="form-group">
+                    <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+                    <select class="form-control" id="sortBy">
+                        <option value="popularity">Popularity</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="distance">Distance</option>
+                        <option value="duration">Duration</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="busCompany"><i class="fas fa-bus"></i> Bus Company</label>
+                    <select class="form-control" id="busCompany">
+                        <option value="">All Companies</option>
+                        <option value="Gateway">Gateway Bus</option>
+                        <option value="Link">Link Bus Services</option>
+                        <option value="Kalita">Kalita Buses</option>
+                        <option value="Trinity">Trinity Buses</option>
+                        <option value="Volcano">Volcano Buses</option>
+                        <option value="Modern">Modern Coast</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label style="visibility: hidden;">Apply Filters</label>
+                    <button class="btn btn-secondary" id="applyFilters" style="width: 100%;">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRoutes">24</div>
+                    <div class="stat-label">Total Routes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCities">12</div>
+                    <div class="stat-label">Cities Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="busCompanies">18</div>
+                    <div class="stat-label">Bus Companies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Daily</div>
+                    <div class="stat-label">200+ Trips</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Routes Grid -->
+        <section>
+            <h2 class="section-title">
+                <i class="fas fa-road"></i> All Bus Routes
+                <span style="font-size: 1rem; color: var(--gray); margin-left: 0.5rem;">
+                    (<span id="displayedRoutes">24</span> routes found)
+                </span>
+            </h2>
+            
+            <div class="routes-grid" id="routesGrid">
+                <!-- Route cards will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Major Cities Section -->
+        <section style="margin-top: 4rem;">
+            <h2 class="section-title">
+                <i class="fas fa-city"></i> Major Cities Served
+            </h2>
+            
+            <div class="cities-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Kampala</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">Capital City</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Gulu</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">Northern Region</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Lira</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">Lango Region</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Mbale</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">Eastern Region</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Arua</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">West Nile</div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; box-shadow: var(--shadow);">
+                    <div style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="font-weight: 600;">Mbarara</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">Western Region</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Route Details Modal -->
+    <div class="modal" id="routeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-route"></i> Route Details
+                </div>
+                <button class="close-modal" id="closeRouteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="routeDetailsContent">
+                    <!-- Route details will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBBS Uganda</h3>
+                    <p>The easiest way to book bus tickets across Uganda. Connect with major bus companies and travel with confidence.</p>
+                    <div class="contact-info" style="margin-top: 1rem;">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+256 700 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@ibbs.ug</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Kampala, Uganda</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-chevron-right"></i> Routes</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-chevron-right"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Popular Routes</h3>
+                    <ul>
+                        <li><i class="fas fa-bus"></i> Kampala to Gulu</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Lira</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Mbale</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Arua</li>
+                        <li><i class="fas fa-bus"></i> Kampala to Mbarara</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Bus Partners</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Gateway Bus</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Link Bus Services</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Kalita Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Trinity Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Volcano Buses</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Iracrates Bus Booking System. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Simplifying travel across Uganda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mock data for routes
+        const routesData = [
+            {
+                id: 1,
+                from: "Kampala",
+                to: "Gulu",
+                distance: 340,
+                duration: "6-7 hours",
+                priceRange: "30,000 - 40,000",
+                avgPrice: 35000,
+                popularity: 95,
+                dailyTrips: 15,
+                companies: ["Gateway Bus", "Link Bus Services", "Kalita Buses", "Trinity Buses"],
+                description: "The most popular route connecting Uganda's capital to the largest city in Northern Uganda.",
+                popular: true,
+                schedules: [
+                    { time: "06:00 AM", company: "Gateway Bus", price: 35000 },
+                    { time: "08:00 AM", company: "Link Bus Services", price: 32000 },
+                    { time: "10:00 AM", company: "Gateway Bus", price: 35000 },
+                    { time: "12:00 PM", company: "Kalita Buses", price: 30000 },
+                    { time: "02:00 PM", company: "Trinity Buses", price: 38000 },
+                    { time: "04:00 PM", company: "Gateway Bus", price: 35000 },
+                    { time: "06:00 PM", company: "Link Bus Services", price: 32000 },
+                    { time: "08:00 PM", company: "Gateway Bus", price: 35000 }
+                ]
+            },
+            {
+                id: 2,
+                from: "Kampala",
+                to: "Lira",
+                distance: 340,
+                duration: "5-6 hours",
+                priceRange: "28,000 - 35,000",
+                avgPrice: 30000,
+                popularity: 85,
+                dailyTrips: 12,
+                companies: ["Gateway Bus", "Kalita Buses", "Trinity Buses"],
+                description: "Direct route to the commercial hub of Lango region.",
+                popular: true,
+                schedules: [
+                    { time: "07:00 AM", company: "Gateway Bus", price: 30000 },
+                    { time: "09:00 AM", company: "Kalita Buses", price: 28000 },
+                    { time: "11:00 AM", company: "Gateway Bus", price: 30000 },
+                    { time: "01:00 PM", company: "Trinity Buses", price: 32000 },
+                    { time: "03:00 PM", company: "Gateway Bus", price: 30000 },
+                    { time: "05:00 PM", company: "Kalita Buses", price: 28000 },
+                    { time: "07:00 PM", company: "Gateway Bus", price: 30000 }
+                ]
+            },
+            {
+                id: 3,
+                from: "Kampala",
+                to: "Mbale",
+                distance: 240,
+                duration: "4-5 hours",
+                priceRange: "20,000 - 30,000",
+                avgPrice: 25000,
+                popularity: 80,
+                dailyTrips: 20,
+                companies: ["Volcano Buses", "Link Bus Services", "Modern Coast"],
+                description: "Scenic route to the foothills of Mount Elgon in Eastern Uganda.",
+                popular: true,
+                schedules: [
+                    { time: "06:30 AM", company: "Volcano Buses", price: 25000 },
+                    { time: "08:30 AM", company: "Link Bus Services", price: 22000 },
+                    { time: "10:30 AM", company: "Volcano Buses", price: 25000 },
+                    { time: "12:30 PM", company: "Modern Coast", price: 28000 },
+                    { time: "02:30 PM", company: "Volcano Buses", price: 25000 },
+                    { time: "04:30 PM", company: "Link Bus Services", price: 22000 },
+                    { time: "06:30 PM", company: "Volcano Buses", price: 25000 }
+                ]
+            },
+            {
+                id: 4,
+                from: "Kampala",
+                to: "Arua",
+                distance: 520,
+                duration: "9-10 hours",
+                priceRange: "35,000 - 45,000",
+                avgPrice: 40000,
+                popularity: 70,
+                dailyTrips: 8,
+                companies: ["Gateway Bus", "Trinity Buses"],
+                description: "Long-distance route to the largest city in West Nile region.",
+                popular: false,
+                schedules: [
+                    { time: "07:30 AM", company: "Gateway Bus", price: 40000 },
+                    { time: "09:00 AM", company: "Trinity Buses", price: 42000 },
+                    { time: "02:00 PM", company: "Gateway Bus", price: 40000 }
+                ]
+            },
+            {
+                id: 5,
+                from: "Kampala",
+                to: "Mbarara",
+                distance: 290,
+                duration: "4-5 hours",
+                priceRange: "18,000 - 25,000",
+                avgPrice: 20000,
+                popularity: 75,
+                dailyTrips: 18,
+                companies: ["Volcano Buses", "Link Bus Services", "Modern Coast"],
+                description: "Route to the largest city in Western Uganda, known as the land of milk.",
+                popular: true,
+                schedules: [
+                    { time: "06:00 AM", company: "Volcano Buses", price: 20000 },
+                    { time: "08:00 AM", company: "Link Bus Services", price: 18000 },
+                    { time: "10:00 AM", company: "Volcano Buses", price: 20000 },
+                    { time: "12:00 PM", company: "Modern Coast", price: 22000 },
+                    { time: "02:00 PM", company: "Volcano Buses", price: 20000 },
+                    { time: "04:00 PM", company: "Link Bus Services", price: 18000 },
+                    { time: "06:00 PM", company: "Volcano Buses", price: 20000 }
+                ]
+            },
+            {
+                id: 6,
+                from: "Kampala",
+                to: "Jinja",
+                distance: 80,
+                duration: "1-2 hours",
+                priceRange: "10,000 - 15,000",
+                avgPrice: 12000,
+                popularity: 65,
+                dailyTrips: 30,
+                companies: ["Link Bus Services", "Kalita Buses", "Local Coasters"],
+                description: "Short route to the adventure capital and source of the Nile.",
+                popular: false,
+                schedules: [
+                    { time: "06:00 AM", company: "Link Bus Services", price: 12000 },
+                    { time: "07:00 AM", company: "Kalita Buses", price: 10000 },
+                    { time: "08:00 AM", company: "Link Bus Services", price: 12000 },
+                    { time: "09:00 AM", company: "Local Coasters", price: 8000 },
+                    { time: "10:00 AM", company: "Link Bus Services", price: 12000 },
+                    { time: "11:00 AM", company: "Kalita Buses", price: 10000 },
+                    { time: "Every hour until 9:00 PM", company: "Various", price: "8,000 - 12,000" }
+                ]
+            },
+            {
+                id: 7,
+                from: "Kampala",
+                to: "Fort Portal",
+                distance: 320,
+                duration: "5-6 hours",
+                priceRange: "25,000 - 32,000",
+                avgPrice: 28000,
+                popularity: 60,
+                dailyTrips: 10,
+                companies: ["Volcano Buses", "Link Bus Services"],
+                description: "Route to the tourist town near Kibale National Park.",
+                popular: false,
+                schedules: [
+                    { time: "07:00 AM", company: "Volcano Buses", price: 28000 },
+                    { time: "09:00 AM", company: "Link Bus Services", price: 25000 },
+                    { time: "01:00 PM", company: "Volcano Buses", price: 28000 },
+                    { time: "03:00 PM", company: "Link Bus Services", price: 25000 }
+                ]
+            },
+            {
+                id: 8,
+                from: "Kampala",
+                to: "Masaka",
+                distance: 130,
+                duration: "2-3 hours",
+                priceRange: "12,000 - 18,000",
+                avgPrice: 15000,
+                popularity: 70,
+                dailyTrips: 25,
+                companies: ["Link Bus Services", "Kalita Buses", "Local Coasters"],
+                description: "Route to the gateway to Southwestern Uganda.",
+                popular: false,
+                schedules: [
+                    { time: "06:00 AM", company: "Link Bus Services", price: 15000 },
+                    { time: "07:30 AM", company: "Kalita Buses", price: 12000 },
+                    { time: "09:00 AM", company: "Link Bus Services", price: 15000 },
+                    { time: "10:30 AM", company: "Local Coasters", price: 10000 },
+                    { time: "Every 1.5 hours until 8:00 PM", company: "Various", price: "10,000 - 15,000" }
+                ]
+            },
+            {
+                id: 9,
+                from: "Gulu",
+                to: "Lira",
+                distance: 120,
+                duration: "2 hours",
+                priceRange: "10,000 - 15,000",
+                avgPrice: 12000,
+                popularity: 55,
+                dailyTrips: 12,
+                companies: ["Local Coasters", "Kalita Buses"],
+                description: "Inter-city route within Northern Uganda.",
+                popular: false,
+                schedules: [
+                    { time: "07:00 AM", company: "Local Coasters", price: 10000 },
+                    { time: "09:00 AM", company: "Kalita Buses", price: 12000 },
+                    { time: "11:00 AM", company: "Local Coasters", price: 10000 },
+                    { time: "01:00 PM", company: "Kalita Buses", price: 12000 },
+                    { time: "03:00 PM", company: "Local Coasters", price: 10000 },
+                    { time: "05:00 PM", company: "Kalita Buses", price: 12000 }
+                ]
+            },
+            {
+                id: 10,
+                from: "Mbale",
+                to: "Soroti",
+                distance: 110,
+                duration: "2 hours",
+                priceRange: "12,000 - 18,000",
+                avgPrice: 15000,
+                popularity: 50,
+                dailyTrips: 8,
+                companies: ["Local Coasters", "Link Bus Services"],
+                description: "Eastern Uganda inter-city route.",
+                popular: false,
+                schedules: [
+                    { time: "08:00 AM", company: "Local Coasters", price: 12000 },
+                    { time: "11:00 AM", company: "Link Bus Services", price: 15000 },
+                    { time: "02:00 PM", company: "Local Coasters", price: 12000 },
+                    { time: "05:00 PM", company: "Link Bus Services", price: 15000 }
+                ]
+            }
+        ];
+
+        // Additional routes for more coverage
+        const additionalRoutes = [
+            { id: 11, from: "Kampala", to: "Hoima", distance: 220, duration: "4 hours", priceRange: "20,000 - 28,000", avgPrice: 24000, popularity: 45 },
+            { id: 12, from: "Kampala", to: "Masindi", distance: 210, duration: "3.5 hours", priceRange: "18,000 - 25,000", avgPrice: 22000, popularity: 40 },
+            { id: 13, from: "Kampala", to: "Tororo", distance: 220, duration: "4 hours", priceRange: "20,000 - 28,000", avgPrice: 24000, popularity: 50 },
+            { id: 14, from: "Kampala", to: "Iganga", distance: 120, duration: "2.5 hours", priceRange: "12,000 - 18,000", avgPrice: 15000, popularity: 60 },
+            { id: 15, from: "Mbarara", to: "Kabale", distance: 150, duration: "3 hours", priceRange: "15,000 - 22,000", avgPrice: 18000, popularity: 40 },
+            { id: 16, from: "Gulu", to: "Arua", distance: 180, duration: "3.5 hours", priceRange: "18,000 - 25,000", avgPrice: 22000, popularity: 35 },
+            { id: 17, from: "Lira", to: "Soroti", distance: 100, duration: "2 hours", priceRange: "10,000 - 16,000", avgPrice: 13000, popularity: 45 },
+            { id: 18, from: "Mbale", to: "Jinja", distance: 160, duration: "3 hours", priceRange: "15,000 - 22,000", avgPrice: 18000, popularity: 30 },
+            { id: 19, from: "Kampala", to: "Entebbe", distance: 40, duration: "1 hour", priceRange: "5,000 - 10,000", avgPrice: 8000, popularity: 90 },
+            { id: 20, from: "Arua", to: "Koboko", distance: 50, duration: "1 hour", priceRange: "8,000 - 12,000", avgPrice: 10000, popularity: 25 },
+            { id: 21, from: "Mbarara", to: "Bushenyi", distance: 70, duration: "1.5 hours", priceRange: "8,000 - 15,000", avgPrice: 12000, popularity: 35 },
+            { id: 22, from: "Kampala", to: "Mityana", distance: 70, duration: "1.5 hours", priceRange: "8,000 - 15,000", avgPrice: 12000, popularity: 55 },
+            { id: 23, from: "Kampala", to: "Mukono", distance: 25, duration: "45 mins", priceRange: "3,000 - 8,000", avgPrice: 5000, popularity: 85 },
+            { id: 24, from: "Gulu", to: "Kitgum", distance: 90, duration: "2 hours", priceRange: "10,000 - 16,000", avgPrice: 13000, popularity: 30 }
+        ];
+
+        // Combine all routes
+        const allRoutes = [...routesData, ...additionalRoutes];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const searchRouteInput = document.getElementById('searchRoute');
+        const fromCitySelect = document.getElementById('fromCity');
+        const toCitySelect = document.getElementById('toCity');
+        const sortBySelect = document.getElementById('sortBy');
+        const busCompanySelect = document.getElementById('busCompany');
+        const applyFiltersBtn = document.getElementById('applyFilters');
+        const routesGrid = document.getElementById('routesGrid');
+        const totalRoutesElement = document.getElementById('totalRoutes');
+        const displayedRoutesElement = document.getElementById('displayedRoutes');
+        const routeModal = document.getElementById('routeModal');
+        const closeRouteModal = document.getElementById('closeRouteModal');
+        const routeDetailsContent = document.getElementById('routeDetailsContent');
+
+        // Statistics
+        const totalCities = new Set();
+        allRoutes.forEach(route => {
+            totalCities.add(route.from);
+            totalCities.add(route.to);
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set statistics
+            totalRoutesElement.textContent = allRoutes.length;
+            document.getElementById('totalCities').textContent = totalCities.size;
+            document.getElementById('busCompanies').textContent = 18; // Hardcoded for now
+            
+            // Load routes
+            renderRoutes(allRoutes);
+            displayedRoutesElement.textContent = allRoutes.length;
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+
+            // Apply filters
+            applyFiltersBtn.addEventListener('click', function() {
+                filterRoutes();
+            });
+
+            // Search as you type
+            searchRouteInput.addEventListener('input', function() {
+                filterRoutes();
+            });
+
+            // Filter on select change
+            [fromCitySelect, toCitySelect, sortBySelect, busCompanySelect].forEach(select => {
+                select.addEventListener('change', function() {
+                    filterRoutes();
+                });
+            });
+
+            // Route modal
+            closeRouteModal.addEventListener('click', function() {
+                routeModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === routeModal) {
+                    routeModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter routes based on criteria
+        function filterRoutes() {
+            const searchTerm = searchRouteInput.value.toLowerCase();
+            const fromCity = fromCitySelect.value;
+            const toCity = toCitySelect.value;
+            const sortBy = sortBySelect.value;
+            const busCompany = busCompanySelect.value;
+            
+            let filteredRoutes = allRoutes.filter(route => {
+                // Search term filter
+                const matchesSearch = searchTerm === '' || 
+                    route.from.toLowerCase().includes(searchTerm) || 
+                    route.to.toLowerCase().includes(searchTerm);
+                
+                // From city filter
+                const matchesFrom = fromCity === '' || route.from === fromCity;
+                
+                // To city filter
+                const matchesTo = toCity === '' || route.to === toCity;
+                
+                // Bus company filter (simplified - in real app would check route.companies array)
+                const matchesCompany = busCompany === '' || 
+                    (route.companies && route.companies.some(company => 
+                        company.toLowerCase().includes(busCompany.toLowerCase())));
+                
+                return matchesSearch && matchesFrom && matchesTo && matchesCompany;
+            });
+            
+            // Sort routes
+            filteredRoutes = sortRoutes(filteredRoutes, sortBy);
+            
+            // Render filtered routes
+            renderRoutes(filteredRoutes);
+            displayedRoutesElement.textContent = filteredRoutes.length;
+            
+            // Show empty state if no routes found
+            if (filteredRoutes.length === 0) {
+                routesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-route"></i>
+                        <h3>No Routes Found</h3>
+                        <p>No bus routes match your search criteria. Try adjusting your filters.</p>
+                        <button class="btn btn-primary" id="resetFilters" style="margin-top: 1rem;">
+                            <i class="fas fa-redo"></i> Reset Filters
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('resetFilters').addEventListener('click', function() {
+                    resetFilters();
+                });
+            }
+        }
+
+        // Sort routes based on selected criteria
+        function sortRoutes(routes, sortBy) {
+            const sortedRoutes = [...routes];
+            
+            switch(sortBy) {
+                case 'price-low':
+                    return sortedRoutes.sort((a, b) => a.avgPrice - b.avgPrice);
+                case 'price-high':
+                    return sortedRoutes.sort((a, b) => b.avgPrice - a.avgPrice);
+                case 'distance':
+                    return sortedRoutes.sort((a, b) => a.distance - b.distance);
+                case 'duration':
+                    // Extract numeric duration for sorting
+                    return sortedRoutes.sort((a, b) => {
+                        const durationA = parseFloat(a.duration.split('-')[0]);
+                        const durationB = parseFloat(b.duration.split('-')[0]);
+                        return durationA - durationB;
+                    });
+                case 'popularity':
+                default:
+                    return sortedRoutes.sort((a, b) => b.popularity - a.popularity);
+            }
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            searchRouteInput.value = '';
+            fromCitySelect.value = '';
+            toCitySelect.value = '';
+            sortBySelect.value = 'popularity';
+            busCompanySelect.value = '';
+            
+            renderRoutes(allRoutes);
+            displayedRoutesElement.textContent = allRoutes.length;
+        }
+
+        // Render routes to the grid
+        function renderRoutes(routes) {
+            routesGrid.innerHTML = '';
+            
+            routes.forEach(route => {
+                const routeCard = document.createElement('div');
+                routeCard.className = `route-card ${route.popular ? 'popular' : ''}`;
+                routeCard.dataset.id = route.id;
+                
+                routeCard.innerHTML = `
+                    <div class="route-header">
+                        <div class="route-title">
+                            <div class="route-cities">${route.from} → ${route.to}</div>
+                            <div style="font-size: 1.5rem; font-weight: bold;">UGX ${route.avgPrice.toLocaleString()}</div>
+                        </div>
+                        <div class="route-distance">${route.distance} km • ${route.duration}</div>
+                    </div>
+                    <div class="route-body">
+                        <div class="route-info">
+                            <div class="info-item">
+                                <div class="info-label">Distance</div>
+                                <div class="info-value">
+                                    <i class="fas fa-road"></i> ${route.distance} km
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Duration</div>
+                                <div class="info-value">
+                                    <i class="fas fa-clock"></i> ${route.duration}
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Price Range</div>
+                                <div class="info-value">
+                                    <i class="fas fa-money-bill-wave"></i> UGX ${route.priceRange}
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Popularity</div>
+                                <div class="info-value">
+                                    <i class="fas fa-fire"></i> ${route.popularity}%
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${route.companies ? `
+                        <div class="bus-companies">
+                            <div class="companies-title">Bus Companies</div>
+                            <div class="companies-list">
+                                ${route.companies.slice(0, 3).map(company => `
+                                    <span class="company-tag">
+                                        <i class="fas fa-bus"></i> ${company}
+                                    </span>
+                                `).join('')}
+                                ${route.companies.length > 3 ? `
+                                    <span class="company-tag">
+                                        +${route.companies.length - 3} more
+                                    </span>
+                                ` : ''}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                            <button class="btn btn-primary view-details-btn" style="flex: 1;">
+                                <i class="fas fa-info-circle"></i> View Details
+                            </button>
+                            <button class="btn btn-secondary book-route-btn" style="flex: 1;">
+                                <i class="fas fa-ticket-alt"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                routesGrid.appendChild(routeCard);
+            });
+            
+            // Add event listeners to route cards
+            document.querySelectorAll('.view-details-btn').forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    const routeId = parseInt(this.closest('.route-card').dataset.id);
+                    const route = allRoutes.find(r => r.id === routeId);
+                    showRouteDetails(route);
+                });
+            });
+            
+            document.querySelectorAll('.book-route-btn').forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    const routeId = parseInt(this.closest('.route-card').dataset.id);
+                    const route = allRoutes.find(r => r.id === routeId);
+                    // Redirect to booking page with route pre-selected
+                    window.location.href = `index.html?from=${encodeURIComponent(route.from)}&to=${encodeURIComponent(route.to)}`;
+                });
+            });
+        }
+
+        // Show route details modal
+        function showRouteDetails(route) {
+            const routeDetails = allRoutes.find(r => r.id === route.id) || route;
+            
+            routeDetailsContent.innerHTML = `
+                <h2>${routeDetails.from} → ${routeDetails.to}</h2>
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">${routeDetails.description || 'Direct bus route connecting these two cities.'}</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="background: #f0f9ff; padding: 1rem; border-radius: var(--radius);">
+                        <div style="font-size: 0.9rem; color: var(--gray);">Distance</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">${routeDetails.distance} km</div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 1rem; border-radius: var(--radius);">
+                        <div style="font-size: 0.9rem; color: var(--gray);">Duration</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">${routeDetails.duration}</div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 1rem; border-radius: var(--radius);">
+                        <div style="font-size: 0.9rem; color: var(--gray);">Average Price</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">UGX ${routeDetails.avgPrice.toLocaleString()}</div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 1rem; border-radius: var(--radius);">
+                        <div style="font-size: 0.9rem; color: var(--gray);">Popularity</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">${routeDetails.popularity}%</div>
+                    </div>
+                </div>
+                
+                <!-- Route Map Visualization -->
+                <div class="route-map">
+                    <div class="map-dots">
+                        <div class="map-dot start" data-city="${routeDetails.from}"></div>
+                        <div class="map-dot" style="background: var(--secondary);"></div>
+                        <div class="map-dot" style="background: var(--secondary);"></div>
+                        <div class="map-dot end" data-city="${routeDetails.to}"></div>
+                    </div>
+                </div>
+                
+                <!-- Bus Companies -->
+                <h3 style="margin-top: 2rem;">
+                    <i class="fas fa-bus"></i> Bus Companies on This Route
+                </h3>
+                <div class="companies-list" style="margin: 1rem 0 2rem;">
+                    ${(routeDetails.companies || ['Gateway Bus', 'Link Bus Services', 'Kalita Buses']).map(company => `
+                        <span class="company-tag" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-bus"></i> ${company}
+                        </span>
+                    `).join('')}
+                </div>
+                
+                <!-- Schedule Table -->
+                <h3>
+                    <i class="fas fa-clock"></i> Daily Schedule
+                </h3>
+                ${routeDetails.schedules ? `
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Departure Time</th>
+                                <th>Bus Company</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${routeDetails.schedules.map(schedule => `
+                                <tr>
+                                    <td>${schedule.time}</td>
+                                    <td>${schedule.company}</td>
+                                    <td>UGX ${typeof schedule.price === 'number' ? schedule.price.toLocaleString() : schedule.price}</td>
+                                    <td>
+                                        <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">
+                                            <i class="fas fa-ticket-alt"></i> Book
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                ` : `
+                    <div style="background: #f9fafb; padding: 2rem; text-align: center; border-radius: var(--radius); margin: 1rem 0;">
+                        <i class="fas fa-clock" style="font-size: 2rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                        <p>Schedule information will be available when you select a specific travel date.</p>
+                    </div>
+                `}
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn btn-secondary" id="bookThisRoute" style="flex: 2;">
+                        <i class="fas fa-ticket-alt"></i> Book This Route Now
+                    </button>
+                    <button class="btn btn-primary" id="closeRouteDetails" style="flex: 1;">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners for modal buttons
+            setTimeout(() => {
+                document.getElementById('bookThisRoute').addEventListener('click', function() {
+                    window.location.href = `index.html?from=${encodeURIComponent(routeDetails.from)}&to=${encodeURIComponent(routeDetails.to)}`;
+                });
+                
+                document.getElementById('closeRouteDetails').addEventListener('click', function() {
+                    routeModal.style.display = 'none';
+                });
+            }, 100);
+            
+            // Show modal
+            routeModal.style.display = 'block';
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-UG', {
+                style: 'currency',
+                currency: 'UGX',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+    </script>
+</body>
+</html>

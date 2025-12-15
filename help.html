@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - IBBS Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0da271;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Help Categories */
+        .help-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card.active {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .category-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .faq-container {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+            transition: background-color 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #f9fafb;
+        }
+
+        .faq-question.active {
+            background: #f0f9ff;
+            color: var(--primary);
+        }
+
+        .faq-toggle {
+            transition: transform 0.3s;
+        }
+
+        .faq-question.active .faq-toggle {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        .faq-answer.active {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Quick Support */
+        .quick-support {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .support-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .support-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .support-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .support-desc {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Policy Cards */
+        .policy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .policy-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .policy-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .policy-list {
+            list-style: none;
+        }
+
+        .policy-list li {
+            padding: 0.5rem 0;
+            color: var(--gray);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .policy-list li:last-child {
+            border-bottom: none;
+        }
+
+        .policy-list i {
+            color: var(--secondary);
+            margin-top: 0.3rem;
+        }
+
+        /* Emergency Contact */
+        .emergency-contact {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .emergency-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .emergency-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .emergency-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            display: block;
+        }
+
+        .emergency-desc {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Live Chat */
+        .live-chat {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary), #0da271);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 90%;
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav li {
+                width: 100%;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.75rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .help-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-support {
+                grid-template-columns: 1fr;
+            }
+            
+            .policy-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .live-chat {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-bus"></i>
+                        <span>IBBS Uganda</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-route"></i> Routes</a></li>
+                        <li><a href="bus_companies.html" class="active"><i class="fas fa-bus-alt"></i> Bus Companies</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+                        <li><a href="help.html" class="active"><i class="fas fa-question-circle"></i> Help</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-menu">
+                    <a href="login.html" class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-user"></i> Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Help & Support Center</h1>
+            <p>Find answers to common questions, contact our support team, or get help with your bookings</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Help Categories -->
+        <section class="help-categories">
+            <div class="category-card active" data-category="booking">
+                <div class="category-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="category-title">Booking & Tickets</div>
+                <div class="category-desc">Help with booking, payments, and ticket issues</div>
+            </div>
+            
+            <div class="category-card" data-category="cancellation">
+                <div class="category-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="category-title">Cancellation & Refunds</div>
+                <div class="category-desc">Cancel bookings and refund policies</div>
+            </div>
+            
+            <div class="category-card" data-category="payment">
+                <div class="category-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="category-title">Payment Issues</div>
+                <div class="category-desc">Problems with payments and mobile money</div>
+            </div>
+            
+            <div class="category-card" data-category="account">
+                <div class="category-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="category-title">Account & Profile</div>
+                <div class="category-desc">Manage your account and profile settings</div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 class="section-title">
+                <i class="fas fa-question-circle"></i> Frequently Asked Questions
+            </h2>
+            
+            <div class="faq-container" id="faqContainer">
+                <!-- FAQ items will be populated by JavaScript based on category -->
+            </div>
+        </section>
+
+        <!-- Quick Support -->
+        <section>
+            <h2 class="section-title" style="margin-bottom: 1.5rem;">
+                <i class="fas fa-life-ring"></i> Quick Support Options
+            </h2>
+            
+            <div class="quick-support">
+                <div class="support-card">
+                    <div class="support-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="support-title">Call Us</div>
+                    <div class="support-desc">Speak directly with our support team for immediate assistance</div>
+                    <button class="btn btn-primary" id="callSupportBtn">
+                        <i class="fas fa-phone"></i> +256 700 123 456
+                    </button>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="support-title">Live Chat</div>
+                    <div class="support-desc">Chat with our support agents in real-time for quick help</div>
+                    <button class="btn btn-secondary" id="startChatBtn">
+                        <i class="fas fa-comment"></i> Start Live Chat
+                    </button>
+                </div>
+                
+                <div class="support-card">
+                    <div class="support-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="support-title">Email Us</div>
+                    <div class="support-desc">Send us an email and we'll respond within 24 hours</div>
+                    <button class="btn btn-primary" id="emailSupportBtn">
+                        <i class="fas fa-paper-plane"></i> support@ibbs.ug
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section class="contact-section">
+            <h2 class="section-title">
+                <i class="fas fa-envelope"></i> Send Us a Message
+            </h2>
+            <p style="color: var(--gray); margin-bottom: 1.5rem;">Fill out the form below and we'll get back to you as soon as possible</p>
+            
+            <form id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="07XXXXXXXX" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select class="form-control" id="subject" required>
+                            <option value="">Select an issue</option>
+                            <option value="booking">Booking Issue</option>
+                            <option value="payment">Payment Problem</option>
+                            <option value="cancellation">Cancellation/Refund</option>
+                            <option value="account">Account Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" id="message" placeholder="Describe your issue in detail..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bookingId">Booking ID (If applicable)</label>
+                    <input type="text" class="form-control" id="bookingId" placeholder="e.g., IBBS-20231215-042">
+                </div>
+                
+                <button type="submit" class="btn btn-secondary" style="width: 100%; padding: 1rem; margin-top: 1rem;">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </section>
+
+        <!-- Policy Cards -->
+        <section>
+            <h2 class="section-title">
+                <i class="fas fa-file-contract"></i> Policies & Procedures
+            </h2>
+            
+            <div class="policy-cards">
+                <div class="policy-card">
+                    <div class="policy-title">
+                        <i class="fas fa-money-bill-wave"></i> Refund Policy
+                    </div>
+                    <ul class="policy-list">
+                        <li><i class="fas fa-check"></i> 100% refund if cancelled 48+ hours before departure</li>
+                        <li><i class="fas fa-check"></i> 80% refund if cancelled 6-48 hours before departure</li>
+                        <li><i class="fas fa-check"></i> No refund if cancelled less than 6 hours before departure</li>
+                        <li><i class="fas fa-check"></i> Refunds processed within 3-5 business days</li>
+                        <li><i class="fas fa-check"></i> Refunds returned to original payment method</li>
+                    </ul>
+                </div>
+                
+                <div class="policy-card">
+                    <div class="policy-title">
+                        <i class="fas fa-exchange-alt"></i> Change Policy
+                    </div>
+                    <ul class="policy-list">
+                        <li><i class="fas fa-check"></i> Free changes if made 24+ hours before departure</li>
+                        <li><i class="fas fa-check"></i> UGX 5,000 fee for changes 6-24 hours before departure</li>
+                        <li><i class="fas fa-check"></i> No changes allowed less than 6 hours before departure</li>
+                        <li><i class="fas fa-check"></i> Seat changes subject to availability</li>
+                        <li><i class="fas fa-check"></i> Date changes allowed up to 7 days from original date</li>
+                    </ul>
+                </div>
+                
+                <div class="policy-card">
+                    <div class="policy-title">
+                        <i class="fas fa-user-shield"></i> Privacy Policy
+                    </div>
+                    <ul class="policy-list">
+                        <li><i class="fas fa-check"></i> We never share your personal information with third parties</li>
+                        <li><i class="fas fa-check"></i> Secure payment processing with encryption</li>
+                        <li><i class="fas fa-check"></i> You can delete your account and data at any time</li>
+                        <li><i class="fas fa-check"></i> We use cookies only to improve your experience</li>
+                        <li><i class="fas fa-check"></i> Read our full privacy policy for more details</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Contact -->
+        <section class="emergency-contact">
+            <div class="emergency-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="emergency-title">24/7 Emergency Support</div>
+            <div class="emergency-desc">For urgent issues, accidents, or emergencies related to your booking</div>
+            <div class="emergency-number">+256 700 911 911</div>
+            <div class="emergency-desc">Available 24 hours a day, 7 days a week for emergency situations only</div>
+        </section>
+    </main>
+
+    <!-- Live Chat Button -->
+    <div class="live-chat">
+        <button class="chat-button" id="chatButton">
+            <i class="fas fa-comment"></i>
+        </button>
+    </div>
+
+    <!-- Chat Modal -->
+    <div class="modal" id="chatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-comments"></i> Live Chat Support
+                </div>
+                <button class="close-modal" id="closeChatModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="chatContent">
+                    <!-- Chat content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--secondary), #0da271);">
+                <div class="modal-title">
+                    <i class="fas fa-check-circle"></i> Message Sent!
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="font-size: 5rem; color: var(--secondary); margin-bottom: 1rem;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 style="margin-bottom: 1rem;">Thank You!</h2>
+                <p>Your message has been sent successfully to our support team.</p>
+                <p style="color: var(--gray); margin-bottom: 2rem;">We'll get back to you within 24 hours.</p>
+                
+                <button class="btn btn-primary" id="closeSuccessModal" style="width: 100%;">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBBS Uganda</h3>
+                    <p>The easiest way to book bus tickets across Uganda. Connect with major bus companies and travel with confidence.</p>
+                    <div class="contact-info" style="margin-top: 1rem;">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+256 700 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>support@ibbs.ug</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Kampala, Uganda</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-chevron-right"></i> Routes</a></li>
+                        <li><a href="bookings.html"><i class="fas fa-chevron-right"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help & Support</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support Resources</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-file-contract"></i> Terms & Conditions</a></li>
+                        <li><a href="#"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Security</a></li>
+                        <li><a href="#"><i class="fas fa-download"></i> Download App</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Bus Partners</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Gateway Bus</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Link Bus Services</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Kalita Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Trinity Buses</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Volcano Buses</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Iracrates Bus Booking System. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Simplifying travel across Uganda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Data by Category
+        const faqData = {
+            booking: [
+                {
+                    question: "How do I book a bus ticket?",
+                    answer: "To book a bus ticket: 1) Go to the Home page, 2) Select your departure and destination cities, 3) Choose your travel date, 4) Select a bus from available options, 5) Choose your seat, 6) Make payment via Mobile Money, and 7) Receive your e-ticket via SMS/email."
+                },
+                {
+                    question: "Do I need to create an account to book?",
+                    answer: "Yes, you need to create an account to book tickets. This allows you to manage your bookings, receive updates, and access your booking history. Registration is quick and free."
+                },
+                {
+                    question: "Can I book for multiple passengers?",
+                    answer: "Currently, you can book for one passenger at a time. To book for multiple passengers, you need to make separate bookings for each person. We're working on group booking functionality for future updates."
+                },
+                {
+                    question: "How do I select a seat?",
+                    answer: "After selecting a bus, you'll see an interactive seat map. Available seats are shown in green, booked seats in gray, and women-only seats in pink. Click on an available seat to select it."
+                },
+                {
+                    question: "What information do I need to book?",
+                    answer: "You need: 1) Your full name, 2) Valid phone number, 3) Email address (optional but recommended), 4) Travel details (route, date), and 5) Mobile Money account for payment."
+                },
+                {
+                    question: "Can I book tickets for future dates?",
+                    answer: "Yes, you can book tickets up to 30 days in advance. We recommend booking at least 24 hours before travel to secure your preferred seat and bus."
+                }
+            ],
+            cancellation: [
+                {
+                    question: "How do I cancel my booking?",
+                    answer: "To cancel: 1) Go to 'My Bookings', 2) Find your upcoming booking, 3) Click 'Cancel', 4) Review the cancellation policy and refund amount, 5) Confirm cancellation. You'll receive an SMS confirmation."
+                },
+                {
+                    question: "What is your refund policy?",
+                    answer: "100% refund if cancelled 48+ hours before departure. 80% refund if cancelled 6-48 hours before departure. No refund if cancelled less than 6 hours before departure. Refunds are processed within 3-5 business days."
+                },
+                {
+                    question: "How long does it take to receive my refund?",
+                    answer: "Refunds are processed within 3-5 business days. The money will be returned to the original payment method (MTN Mobile Money or Airtel Money account). You'll receive an SMS when the refund is processed."
+                },
+                {
+                    question: "Can I change my booking instead of cancelling?",
+                    answer: "Yes, you can change your booking up to 6 hours before departure. Changes are free if made 24+ hours before departure. A UGX 5,000 fee applies for changes 6-24 hours before departure."
+                },
+                {
+                    question: "What happens if I miss my bus?",
+                    answer: "If you miss your bus, you can: 1) Rebook for the next available bus (subject to availability), 2) Cancel (subject to cancellation policy), or 3) Contact our support team for assistance. No-shows are not eligible for refunds."
+                }
+            ],
+            payment: [
+                {
+                    question: "What payment methods do you accept?",
+                    answer: "We accept: 1) MTN Mobile Money, 2) Airtel Money, 3) Bank transfer (via Flutterwave), and 4) Cash payment at select bus parks. Mobile Money is the most popular and recommended method."
+                },
+                {
+                    question: "I was charged but didn't get a ticket. What should I do?",
+                    answer: "First, check your SMS and email for the ticket. If you don't receive it within 10 minutes, contact our support team with your payment transaction ID and phone number. We'll verify and resend your ticket."
+                },
+                {
+                    question: "Is it safe to pay with Mobile Money?",
+                    answer: "Yes, our payment system is secure and encrypted. We don't store your Mobile Money PIN. All transactions are processed through secure payment gateways with bank-level security."
+                },
+                {
+                    question: "Can I pay at the bus park?",
+                    answer: "Yes, you can select 'Pay at Bus Park' option during booking. You'll receive a booking reference to present at the ticket counter. Payment must be made at least 1 hour before departure to secure your seat."
+                },
+                {
+                    question: "Do you offer payment plans or installments?",
+                    answer: "Currently, we don't offer payment plans. Full payment is required at the time of booking. We're exploring installment options for future updates to make travel more accessible."
+                }
+            ],
+            account: [
+                {
+                    question: "How do I reset my password?",
+                    answer: "Click 'Forgot Password' on the login page, enter your registered phone number, and we'll send an OTP to reset your password. You can also contact support if you need assistance."
+                },
+                {
+                    question: "Can I update my personal information?",
+                    answer: "Yes, go to your profile settings to update your name, phone number, email address, and other personal information. Some changes may require verification for security purposes."
+                },
+                {
+                    question: "How do I delete my account?",
+                    answer: "Contact our support team to request account deletion. We'll process your request within 7 days. Note: Deleting your account will also delete your booking history and personal data."
+                },
+                {
+                    question: "Why am I not receiving SMS notifications?",
+                    answer: "Check: 1) Your phone number is correctly entered in your profile, 2) You have network coverage, 3) SMS storage isn't full. If issues persist, contact support or enable email notifications as an alternative."
+                },
+                {
+                    question: "Can I have multiple accounts with the same phone number?",
+                    answer: "No, each phone number can only be registered to one account. This is for security and to prevent duplicate bookings. If you need to change the phone number on your account, update it in your profile settings."
+                }
+            ]
+        };
+
+        // Chat Messages
+        const chatMessages = [
+            { sender: "agent", text: "Hello! Welcome to IBBS Support. How can I help you today?", time: "Just now" },
+            { sender: "user", text: "Hi, I need help with my booking", time: "Just now" }
+        ];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const categoryCards = document.querySelectorAll('.category-card');
+        const faqContainer = document.getElementById('faqContainer');
+        const callSupportBtn = document.getElementById('callSupportBtn');
+        const startChatBtn = document.getElementById('startChatBtn');
+        const emailSupportBtn = document.getElementById('emailSupportBtn');
+        const contactForm = document.getElementById('contactForm');
+        const chatButton = document.getElementById('chatButton');
+        const chatModal = document.getElementById('chatModal');
+        const closeChatModal = document.getElementById('closeChatModal');
+        const chatContent = document.getElementById('chatContent');
+        const successModal = document.getElementById('successModal');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+
+        // Current active category
+        let activeCategory = 'booking';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load FAQs for active category
+            renderFAQs(activeCategory);
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+
+            // Category selection
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove active class from all cards
+                    categoryCards.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked card
+                    this.classList.add('active');
+                    
+                    // Get category
+                    activeCategory = this.dataset.category;
+                    
+                    // Render FAQs for this category
+                    renderFAQs(activeCategory);
+                });
+            });
+
+            // Call support button
+            callSupportBtn.addEventListener('click', function() {
+                window.location.href = 'tel:+256700123456';
+            });
+
+            // Email support button
+            emailSupportBtn.addEventListener('click', function() {
+                window.location.href = 'mailto:support@ibbs.ug?subject=IBBS Support Request';
+            });
+
+            // Start chat button
+            startChatBtn.addEventListener('click', function() {
+                showChatModal();
+            });
+
+            // Chat button
+            chatButton.addEventListener('click', function() {
+                showChatModal();
+            });
+
+            // Chat modal
+            closeChatModal.addEventListener('click', function() {
+                chatModal.style.display = 'none';
+            });
+
+            // Contact form submission
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                const bookingId = document.getElementById('bookingId').value;
+                
+                // Validate phone number
+                if (!/^07\d{8}$/.test(phone)) {
+                    alert('Please enter a valid Ugandan phone number (07XXXXXXXX)');
+                    return;
+                }
+                
+                // Validate email
+                if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                // In a real app, this would make an API call to submit the form
+                console.log('Contact form submitted:', { name, phone, email, subject, message, bookingId });
+                
+                // Show success modal
+                successModal.style.display = 'block';
+                
+                // Reset form
+                contactForm.reset();
+            });
+
+            // Success modal
+            closeSuccessModal.addEventListener('click', function() {
+                successModal.style.display = 'none';
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === chatModal) {
+                    chatModal.style.display = 'none';
+                }
+                if (e.target === successModal) {
+                    successModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Render FAQs for a category
+        function renderFAQs(category) {
+            const faqs = faqData[category] || [];
+            
+            // Clear container
+            faqContainer.innerHTML = '';
+            
+            if (faqs.length === 0) {
+                faqContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; background: white; border-radius: var(--radius); box-shadow: var(--shadow);">
+                        <i class="fas fa-question-circle" style="font-size: 3rem; color: var(--light-gray); margin-bottom: 1rem;"></i>
+                        <h3>No FAQs Available</h3>
+                        <p>No frequently asked questions found for this category.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Create FAQ items
+            faqs.forEach((faq, index) => {
+                const faqItem = document.createElement('div');
+                faqItem.className = 'faq-item';
+                faqItem.innerHTML = `
+                    <div class="faq-question" data-index="${index}">
+                        <span>${faq.question}</span>
+                        <span class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                    <div class="faq-answer">
+                        ${faq.answer}
+                    </div>
+                `;
+                
+                faqContainer.appendChild(faqItem);
+            });
+            
+            // Add event listeners to FAQ questions
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', function() {
+                    const index = this.dataset.index;
+                    const answer = this.nextElementSibling;
+                    
+                    // Toggle active class
+                    this.classList.toggle('active');
+                    answer.classList.toggle('active');
+                    
+                    // Close other FAQs
+                    document.querySelectorAll('.faq-question').forEach(otherQuestion => {
+                        if (otherQuestion !== this && otherQuestion.classList.contains('active')) {
+                            otherQuestion.classList.remove('active');
+                            otherQuestion.nextElementSibling.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        // Show chat modal
+        function showChatModal() {
+            chatContent.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">Live Chat with IBBS Support</div>
+                    <div style="font-size: 0.9rem; color: var(--gray);">
+                        <i class="fas fa-circle" style="color: var(--secondary); font-size: 0.7rem;"></i>
+                        <span style="margin-left: 0.5rem;">Agent available • Usually replies in 2 minutes</span>
+                    </div>
+                </div>
+                
+                <div id="chatMessages" style="height: 300px; overflow-y: auto; margin-bottom: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: var(--radius);">
+                    <!-- Chat messages will be populated here -->
+                </div>
+                
+                <div class="form-group">
+                    <label for="chatInput" style="margin-bottom: 0.5rem; display: block; font-weight: 600;">
+                        Type your message
+                    </label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" class="form-control" id="chatInput" placeholder="Type your message here..." style="flex: 1;">
+                        <button class="btn btn-secondary" id="sendChatBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--light-gray);">
+                    <div style="font-size: 0.9rem; color: var(--gray);">
+                        <i class="fas fa-info-circle"></i>
+                        <span style="margin-left: 0.5rem;">Chat hours: Monday-Sunday, 7:00 AM - 10:00 PM EAT</span>
+                    </div>
+                </div>
+            `;
+            
+            // Render chat messages
+            renderChatMessages();
+            
+            // Add event listener for send button
+            setTimeout(() => {
+                document.getElementById('sendChatBtn').addEventListener('click', sendChatMessage);
+                document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+                
+                // Auto-scroll to bottom of chat
+                const chatMessagesDiv = document.getElementById('chatMessages');
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }, 100);
+            
+            // Show modal
+            chatModal.style.display = 'block';
+        }
+
+        // Render chat messages
+        function renderChatMessages() {
+            const chatMessagesDiv = document.getElementById('chatMessages');
+            chatMessagesDiv.innerHTML = '';
+            
+            chatMessages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.style.marginBottom = '1rem';
+                messageDiv.style.display = 'flex';
+                messageDiv.style.flexDirection = message.sender === 'user' ? 'row-reverse' : 'row';
+                messageDiv.style.gap = '0.5rem';
+                
+                messageDiv.innerHTML = `
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: ${message.sender === 'user' ? 'var(--primary)' : 'var(--secondary)'}; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">
+                        ${message.sender === 'user' ? 'U' : 'A'}
+                    </div>
+                    <div style="max-width: 70%;">
+                        <div style="background: ${message.sender === 'user' ? 'var(--primary)' : 'white'}; color: ${message.sender === 'user' ? 'white' : 'var(--dark)'}; padding: 0.75rem; border-radius: ${message.sender === 'user' ? '15px 15px 0 15px' : '15px 15px 15px 0'}; box-shadow: ${message.sender === 'user' ? 'none' : 'var(--shadow)'};">
+                            ${message.text}
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--gray); margin-top: 0.25rem; text-align: ${message.sender === 'user' ? 'right' : 'left'}">
+                            ${message.time}
+                        </div>
+                    </div>
+                `;
+                
+                chatMessagesDiv.appendChild(messageDiv);
+            });
+        }
+
+        // Send chat message
+        function sendChatMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            chatMessages.push({
+                sender: 'user',
+                text: message,
+                time: 'Just now'
+            });
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Render updated messages
+            renderChatMessages();
+            
+            // Auto-scroll to bottom
+            const chatMessagesDiv = document.getElementById('chatMessages');
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            
+            // Simulate agent reply after 2 seconds
+            setTimeout(() => {
+                const responses = [
+                    "Thank you for your message. How can I assist you further?",
+                    "I understand. Let me check that for you.",
+                    "Could you please provide more details about your issue?",
+                    "I'll need your booking ID to look up your reservation.",
+                    "Is there anything else I can help you with today?"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                
+                chatMessages.push({
+                    sender: 'agent',
+                    text: randomResponse,
+                    time: 'Just now'
+                });
+                
+                renderChatMessages();
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }, 2000);
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-UG', {
+                style: 'currency',
+                currency: 'UGX',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+    </script>
+</body>
+</html>

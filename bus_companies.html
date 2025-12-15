@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Companies - IBBS Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0da271;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: -2rem auto 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-btn {
+            padding: 0.75rem 2rem;
+        }
+
+        /* Companies Grid */
+        .companies-section {
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .company-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .company-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .company-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+        }
+
+        .company-rating {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-tagline {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .company-body {
+            padding: 1.5rem;
+        }
+
+        .company-info {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-icon {
+            width: 24px;
+            color: var(--primary);
+        }
+
+        .info-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--dark);
+        }
+
+        .info-value {
+            color: var(--gray);
+        }
+
+        .company-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background: #f0f9ff;
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .company-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: white;
+            transition: border-color 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: var(--radius);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .stat-card-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+                order: 3;
+                margin-top: 1rem;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav li {
+                width: 100%;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.75rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .companies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .company-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-bus"></i>
+                        <span>IBBS Uganda</span>
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-route"></i> Routes</a></li>
+                        <li><a href="bus_companies.html" class="active"><i class="fas fa-bus-alt"></i> Bus Companies</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-ticket-alt"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-menu">
+                    <button class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-user"></i> Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Trusted Bus Companies in Uganda</h1>
+            <p>Choose from our network of reliable bus operators offering comfortable and safe travel across Uganda. All companies are verified and licensed.</p>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="container">
+        <div class="search-bar">
+            <form class="search-form" id="searchForm">
+                <input type="text" class="search-input" id="searchInput" aria-label="Search bus companies by name, location, or features" placeholder="Search bus companies by name, location, or features...">
+                <button type="submit" class="btn btn-secondary search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="container">
+        <div class="filter-section">
+            <h3 style="margin-bottom: 1.5rem; color: var(--dark); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-filter"></i> Filter Companies
+            </h3>
+            
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-map-marker-alt"></i> Operating Region
+                    </label>
+                    <select class="filter-select" id="regionFilter">
+                        <option value="">All Regions</option>
+                        <option value="northern">Northern Uganda</option>
+                        <option value="central">Central Uganda</option>
+                        <option value="eastern">Eastern Uganda</option>
+                        <option value="western">Western Uganda</option>
+                        <option value="national">National Coverage</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-star"></i> Rating
+                    </label>
+                    <select class="filter-select" id="ratingFilter">
+                        <option value="">Any Rating</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="3">3+ Stars</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-couch"></i> Bus Type
+                    </label>
+                    <select class="filter-select" id="busTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="executive">Executive</option>
+                        <option value="standard">Standard</option>
+                        <option value="sleeper">Sleeper</option>
+                        <option value="coaster">Coaster</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-check-circle"></i> Features
+                    </label>
+                    <select class="filter-select" id="featuresFilter">
+                        <option value="">All Features</option>
+                        <option value="wifi">WiFi Available</option>
+                        <option value="ac">Air Conditioning</option>
+                        <option value="meals">Meals Included</option>
+                        <option value="entertainment">Entertainment</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Companies Section -->
+    <section class="companies-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-bus-alt"></i> Our Bus Partners
+            </h2>
+            <p class="section-subtitle">Verified and trusted bus companies operating across Uganda</p>
+            
+            <div class="companies-grid" id="companiesGrid">
+                <!-- Companies will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <div class="stat-card-value">15+</div>
+                    <div class="stat-card-label">Bus Companies</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="stat-card-value">50+</div>
+                    <div class="stat-card-label">Routes Covered</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-value">500+</div>
+                    <div class="stat-card-label">Buses Available</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-card-value">4.8/5</div>
+                    <div class="stat-card-label">Average Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBBS Uganda</h3>
+                    <p>The easiest way to book bus tickets across Uganda. Connect with major bus companies and travel with confidence.</p>
+                    <div class="contact-info" style="margin-top: 1rem;">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+256 700 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>partners@ibbs.ug</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="routes.html"><i class="fas fa-chevron-right"></i> Routes</a></li>
+                        <li><a href="bus_companies.html"><i class="fas fa-chevron-right"></i> Bus Companies</a></li>
+                        <li><a href="my_bookings.html"><i class="fas fa-chevron-right"></i> My Bookings</a></li>
+                        <li><a href="help.html"><i class="fas fa-chevron-right"></i> Help</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Popular Bus Companies</h3>
+                    <ul>
+                        <li><a href="#gateway"><i class="fas fa-bus"></i> Gateway Bus</a></li>
+                        <li><a href="#link"><i class="fas fa-bus"></i> Link Bus Services</a></li>
+                        <li><a href="#kalita"><i class="fas fa-bus"></i> Kalita Buses</a></li>
+                        <li><a href="#trinity"><i class="fas fa-bus"></i> Trinity Buses</a></li>
+                        <li><a href="#volcano"><i class="fas fa-bus"></i> Volcano Buses</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Partner With Us</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Become a Partner</a></li>
+                        <li><a href="#"><i class="fas fa-chart-line"></i> Business Dashboard</a></li>
+                        <li><a href="#"><i class="fas fa-file-contract"></i> Terms for Partners</a></li>
+                        <li><a href="#"><i class="fas fa-headset"></i> Partner Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Iracrates Bus Booking System. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Simplifying travel across Uganda</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Bus Companies Data
+        const companiesData = [
+            {
+                id: 1,
+                name: "Gateway Bus",
+                tagline: "Your Gateway to Comfortable Travel",
+                logo: "G",
+                color: "#2563eb",
+                rating: 4.8,
+                routes: 25,
+                buses: 80,
+                years: 15,
+                phone: "+256 700 111 111",
+                email: "info@gatewaybus.ug",
+                website: "www.gatewaybus.ug",
+                region: "national",
+                busTypes: ["Executive", "Standard", "Sleeper"],
+                features: ["WiFi", "AC", "TV", "Charging Ports", "Meals", "Entertainment"],
+                description: "Leading bus company in Uganda with nationwide coverage and premium services.",
+                popularRoutes: ["Kampala-Gulu", "Kampala-Lira", "Kampala-Arua", "Kampala-Mbale"]
+            },
+            {
+                id: 2,
+                name: "Link Bus Services",
+                tagline: "Connecting People and Places",
+                logo: "L",
+                color: "#10b981",
+                rating: 4.5,
+                routes: 18,
+                buses: 45,
+                years: 12,
+                phone: "+256 700 222 222",
+                email: "contact@linkbus.ug",
+                website: "www.linkbus.ug",
+                region: "northern",
+                busTypes: ["Standard", "Coaster"],
+                features: ["AC", "Water", "Snacks"],
+                description: "Reliable service focused on Northern Uganda routes with affordable prices.",
+                popularRoutes: ["Kampala-Gulu", "Gulu-Lira", "Gulu-Arua"]
+            },
+            {
+                id: 3,
+                name: "Kalita Buses",
+                tagline: "Safe and Timely Journeys",
+                logo: "K",
+                color: "#f59e0b",
+                rating: 4.2,
+                routes: 12,
+                buses: 35,
+                years: 8,
+                phone: "+256 700 333 333",
+                email: "bookings@kalita.ug",
+                website: "www.kalita.ug",
+                region: "central",
+                busTypes: ["Standard", "Coaster"],
+                features: ["AC", "Radio"],
+                description: "Budget-friendly option for travelers in Central and Eastern Uganda.",
+                popularRoutes: ["Kampala-Jinja", "Kampala-Mbale", "Kampala-Iganga"]
+            },
+            {
+                id: 4,
+                name: "Trinity Buses",
+                tagline: "Luxury Redefined",
+                logo: "T",
+                color: "#8b5cf6",
+                rating: 4.9,
+                routes: 8,
+                buses: 25,
+                years: 5,
+                phone: "+256 700 444 444",
+                email: "luxury@trinity.ug",
+                website: "www.trinity.ug",
+                region: "national",
+                busTypes: ["Executive", "Sleeper"],
+                features: ["WiFi", "AC", "TV", "Charging Ports", "Gourmet Meals", "Entertainment", "Blankets"],
+                description: "Premium luxury bus service with sleeper buses for long-distance travel.",
+                popularRoutes: ["Kampala-Gulu", "Kampala-Arua", "Kampala-Mbarara"]
+            },
+            {
+                id: 5,
+                name: "Volcano Buses",
+                tagline: "The Western Connection",
+                logo: "V",
+                color: "#ef4444",
+                rating: 4.3,
+                routes: 15,
+                buses: 40,
+                years: 10,
+                phone: "+256 700 555 555",
+                email: "travel@volcano.ug",
+                website: "www.volcano.ug",
+                region: "western",
+                busTypes: ["Standard", "Executive"],
+                features: ["AC", "TV", "Snacks"],
+                description: "Specialized in Western Uganda routes with comfortable coaches.",
+                popularRoutes: ["Kampala-Mbarara", "Mbarara-Kabale", "Kampala-Fort Portal"]
+            },
+            {
+                id: 6,
+                name: "Northern Star Coaches",
+                tagline: "Shining Across the North",
+                logo: "N",
+                color: "#06b6d4",
+                rating: 4.4,
+                routes: 10,
+                buses: 30,
+                years: 7,
+                phone: "+256 700 666 666",
+                email: "info@northernstar.ug",
+                website: "www.northernstar.ug",
+                region: "northern",
+                busTypes: ["Standard", "Coaster"],
+                features: ["AC", "Water"],
+                description: "Reliable service for Northern Uganda with multiple daily departures.",
+                popularRoutes: ["Gulu-Kitgum", "Gulu-Pader", "Lira-Soroti"]
+            },
+            {
+                id: 7,
+                name: "Eastern Express",
+                tagline: "Express to the East",
+                logo: "E",
+                color: "#22c55e",
+                rating: 4.1,
+                routes: 8,
+                buses: 25,
+                years: 6,
+                phone: "+256 700 777 777",
+                email: "express@easternexpress.ug",
+                website: "www.easternexpress.ug",
+                region: "eastern",
+                busTypes: ["Standard"],
+                features: ["AC"],
+                description: "Fast and efficient service for Eastern Uganda routes.",
+                popularRoutes: ["Kampala-Mbale", "Mbale-Soroti", "Jinja-Tororo"]
+            },
+            {
+                id: 8,
+                name: "Royal Coaches",
+                tagline: "Travel Like Royalty",
+                logo: "R",
+                color: "#d946ef",
+                rating: 4.7,
+                routes: 6,
+                buses: 20,
+                years: 4,
+                phone: "+256 700 888 888",
+                email: "royal@royalcoaches.ug",
+                website: "www.royalcoaches.ug",
+                region: "national",
+                busTypes: ["Executive", "Sleeper"],
+                features: ["WiFi", "AC", "TV", "Charging Ports", "Meals", "Entertainment", "Toilet"],
+                description: "Ultra-premium service with VIP amenities and limited seating.",
+                popularRoutes: ["Kampala-Gulu", "Kampala-Mbarara", "Entebbe-Kampala-Gulu"]
+            }
+        ];
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const companiesGrid = document.getElementById('companiesGrid');
+        const regionFilter = document.getElementById('regionFilter');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const busTypeFilter = document.getElementById('busTypeFilter');
+        const featuresFilter = document.getElementById('featuresFilter');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load all companies
+            renderCompanies(companiesData);
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+
+            // Search functionality
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                filterCompanies();
+            });
+
+            searchInput.addEventListener('input', function() {
+                if (this.value.length >= 3 || this.value.length === 0) {
+                    filterCompanies();
+                }
+            });
+
+            // Filter changes
+            regionFilter.addEventListener('change', filterCompanies);
+            ratingFilter.addEventListener('change', filterCompanies);
+            busTypeFilter.addEventListener('change', filterCompanies);
+            featuresFilter.addEventListener('change', filterCompanies);
+
+            // Login button
+            loginBtn.addEventListener('click', function() {
+                // In a real app, this would open login modal
+                // For now, redirect to login page
+                window.location.href = 'login.html';
+            });
+
+            // Admin button
+            adminBtn.addEventListener('click', function() {
+                window.location.href = 'admin.html';
+            });
+        }
+
+        // Filter companies based on search and filters
+        function filterCompanies() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const region = regionFilter.value;
+            const rating = ratingFilter.value;
+            const busType = busTypeFilter.value;
+            const feature = featuresFilter.value;
+
+            let filteredCompanies = companiesData.filter(company => {
+                // Search term filter
+                if (searchTerm && !company.name.toLowerCase().includes(searchTerm) && 
+                    !company.tagline.toLowerCase().includes(searchTerm) &&
+                    !company.description.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+
+                // Region filter
+                if (region && company.region !== region) {
+                    return false;
+                }
+
+                // Rating filter
+                if (rating && company.rating < parseFloat(rating)) {
+                    return false;
+                }
+
+                // Bus type filter
+                if (busType && !company.busTypes.some(type => 
+                    type.toLowerCase().includes(busType.toLowerCase()))) {
+                    return false;
+                }
+
+                // Features filter
+                if (feature && !company.features.some(f => 
+                    f.toLowerCase().includes(feature.toLowerCase()))) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            renderCompanies(filteredCompanies);
+        }
+
+        // Render companies to the grid
+        function renderCompanies(companies) {
+            companiesGrid.innerHTML = '';
+            
+            if (companies.length === 0) {
+                companiesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bus-slash"></i>
+                        <h3>No Companies Found</h3>
+                        <p>No bus companies match your search criteria.</p>
+                        <p>Try adjusting your filters or search term.</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;" id="resetFilters">
+                            <i class="fas fa-redo"></i> Reset All Filters
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('resetFilters')?.addEventListener('click', function() {
+                    searchInput.value = '';
+                    regionFilter.value = '';
+                    ratingFilter.value = '';
+                    busTypeFilter.value = '';
+                    featuresFilter.value = '';
+                    renderCompanies(companiesData);
+                });
+                
+                return;
+            }
+            
+            companies.forEach(company => {
+                const companyCard = document.createElement('div');
+                companyCard.className = 'company-card';
+                companyCard.id = company.name.toLowerCase().replace(/\s+/g, '');
+                
+                const featuresHTML = company.features.map(feature => `
+                    <span class="feature-tag">
+                        <i class="fas fa-check-circle"></i>
+                        ${feature}
+                    </span>
+                `).join('');
+                
+                const popularRoutesHTML = company.popularRoutes.map(route => `
+                    <span style="display: inline-block; background: #f3f4f6; color: var(--gray); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; margin-right: 0.5rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-road"></i> ${route}
+                    </span>
+                `).join('');
+                
+                companyCard.innerHTML = `
+                    <div class="company-header" style="background: linear-gradient(135deg, ${company.color}, ${adjustColor(company.color, -20)})">
+                        <div class="company-rating">
+                            <i class="fas fa-star"></i>
+                            ${company.rating}
+                        </div>
+                        <div class="company-logo" style="background: white; color: ${company.color};">
+                            ${company.logo}
+                        </div>
+                        <div class="company-name">${company.name}</div>
+                        <div class="company-tagline">${company.tagline}</div>
+                    </div>
+                    
+                    <div class="company-body">
+                        <div class="company-info">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="info-label">Phone:</div>
+                                <div class="info-value">${company.phone}</div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="info-label">Email:</div>
+                                <div class="info-value">${company.email}</div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="info-label">Website:</div>
+                                <div class="info-value">${company.website}</div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-map"></i>
+                                </div>
+                                <div class="info-label">Region:</div>
+                                <div class="info-value">${formatRegion(company.region)}</div>
+                            </div>
+                        </div>
+                        
+                        <p style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                            ${company.description}
+                        </p>
+                        
+                        <div class="company-features">
+                            ${featuresHTML}
+                        </div>
+                        
+                        <div class="company-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${company.routes}</div>
+                                <div class="stat-label">Routes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${company.buses}</div>
+                                <div class="stat-label">Buses</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${company.years}+</div>
+                                <div class="stat-label">Years</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-road"></i>
+                                Popular Routes
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap;">
+                                ${popularRoutesHTML}
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-primary" style="flex: 1;" onclick="viewCompanyBuses(${company.id})">
+                                <i class="fas fa-eye"></i> View Buses
+                            </button>
+                            <button class="btn btn-outline" style="flex: 1; border-color: var(--primary); color: var(--primary);" onclick="bookWithCompany(${company.id})">
+                                <i class="fas fa-ticket-alt"></i> Book Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                companiesGrid.appendChild(companyCard);
+            });
+        }
+
+        // Helper functions
+        function adjustColor(color, amount) {
+            let usePound = false;
+            if (color[0] === "#") {
+                color = color.slice(1);
+                usePound = true;
+            }
+            const num = parseInt(color, 16);
+            let r = (num >> 16) + amount;
+            if (r > 255) r = 255;
+            else if (r < 0) r = 0;
+            let b = ((num >> 8) & 0x00FF) + amount;
+            if (b > 255) b = 255;
+            else if (b < 0) b = 0;
+            let g = (num & 0x0000FF) + amount;
+            if (g > 255) g = 255;
+            else if (g < 0) g = 0;
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
+        }
+
+        function formatRegion(region) {
+            const regions = {
+                'northern': 'Northern Uganda',
+                'central': 'Central Uganda',
+                'eastern': 'Eastern Uganda',
+                'western': 'Western Uganda',
+                'national': 'Nationwide'
+            };
+            return regions[region] || region;
+        }
+
+        // Action functions (would be connected to backend)
+        function viewCompanyBuses(companyId) {
+            const company = companiesData.find(c => c.id === companyId);
+            if (company) {
+                alert(`Redirecting to ${company.name} buses...\n\nIn a real application, this would show all buses from ${company.name} with their schedules and availability.`);
+                // In a real app: window.location.href = `company_buses.html?company=${companyId}`;
+            }
+        }
+
+        function bookWithCompany(companyId) {
+            const company = companiesData.find(c => c.id === companyId);
+            if (company) {
+                alert(`Booking with ${company.name}...\n\nYou would be redirected to search for routes and schedules operated by ${company.name}.`);
+                // In a real app: window.location.href = `index.html?company=${companyId}`;
+            }
+        }
+
+        // Global functions for button actions
+        window.viewCompanyBuses = viewCompanyBuses;
+        window.bookWithCompany = bookWithCompany;
+    </script>
+</body>
+</html>
