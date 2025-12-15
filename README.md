@@ -236,7 +236,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 🆘 Support
 📧 Email: support@ibbs.ug
 
-📞 Phone: +256 700 123 456
+📞 Phone: +256 780702050
 
 🐛 Report Issues
 
