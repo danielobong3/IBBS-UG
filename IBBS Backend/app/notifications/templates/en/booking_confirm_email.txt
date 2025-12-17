@@ -1,0 +1,7 @@
+Hello {{ user_name or 'Customer' }},
+
+Your booking for trip {{ trip_id }} on {{ departure }} is confirmed.
+
+Booking reference: {{ booking_ref }}
+
+Thank you for choosing us.

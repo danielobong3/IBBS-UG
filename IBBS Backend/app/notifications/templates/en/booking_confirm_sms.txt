@@ -1,0 +1,1 @@
+Hi {{ user_name or 'Customer' }}, your booking {{ booking_ref }} for trip {{ trip_id }} at {{ departure }} is confirmed.

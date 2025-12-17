@@ -1,0 +1,1 @@
+Mukwano {{ user_name or '' }}, booking {{ booking_ref }} ku trip {{ trip_id }} ku {{ departure }} ekyase.

@@ -1,0 +1,7 @@
+Gyebale ko {{ user_name or 'Mukwano' }},
+
+Olunaku lwe booking yo ku trip {{ trip_id }} ku {{ departure }} lukyuse.
+
+Reference: {{ booking_ref }}
+
+Webale nnyo.
